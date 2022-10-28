@@ -1,6 +1,7 @@
 #include "WeaponCommon.as";
 #include "AccurateSoundPlay.as";
 #include "ParticleSparks.as";
+#include "ShipsCommon.as";
 
 const f32 PROJECTILE_SPEED = 3.0f; // change on your own risk! Scaling sprite time dependencies!
 const f32 PROJECTILE_SPREAD = 0.5;
@@ -71,8 +72,8 @@ void onInit(CBlob@ this)
 
 void onTick(CBlob@ this)
 {
-	if (this.getShape().getVars().customData <= 0)
-		return;
+	const int col = this.getShape().getVars().customData;
+	if (col <= 0) return; //not placed yet
 
 	u32 gameTime = getGameTime();
 	AttachmentPoint@ seat = this.getAttachmentPoint(0);
@@ -120,12 +121,18 @@ void onTick(CBlob@ this)
 
 	if (isServer())
 	{
-		refillAmmo(this, REFILL_AMOUNT, REFILL_SECONDS, REFILL_SECONDARY_CORE_AMOUNT, REFILL_SECONDARY_CORE_SECONDS);
+		Ship@ ship = getShipSet().getShip(col);
+		if (ship !is null)
+		{
+			checkDocked(this, ship);
+			refillAmmo(this, ship, REFILL_AMOUNT, REFILL_SECONDS, REFILL_SECONDARY_CORE_AMOUNT, REFILL_SECONDARY_CORE_SECONDS);
+		}
 	}
 }
 
 void Manual(CBlob@ this, CBlob@ controller)
 {
+	const int col = this.getShape().getVars().customData;
 	Vec2f aimpos = controller.getAimPos();
 	Vec2f pos = this.getPosition();
 	Vec2f aimVec = aimpos - pos;
@@ -134,7 +141,7 @@ void Manual(CBlob@ this, CBlob@ controller)
 	// fire
 	if (controller.isMyPlayer() && controller.isKeyPressed(key_action1) && canShootManual(this))
 	{
-		Ship@ ship = getShip(this.getShape().getVars().customData);
+		Ship@ ship = getShipSet().getShip(col);
 		u16 netID = 0;
 		if (ship !is null && player !is null && (!ship.isMothership || ship.owner != player.getUsername()))
 			netID = controller.getNetworkID();

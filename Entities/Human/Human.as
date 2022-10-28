@@ -538,9 +538,9 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Repulsor
 		AddBlock(this, menu, "repulsor", "$REPULSOR$", Trans::Repulsor, Trans::RepulsorDesc, core, 0.25f);
 	}
-	{ //Decoy Core
-		AddBlock(this, menu, "decoycore", "$DECOYCORE$", Trans::DecoyCore, Trans::DecoyCoreDesc, core, 6.0f);
-	}
+	//{ //Decoy Core
+	//	AddBlock(this, menu, "decoycore", "$DECOYCORE$", Trans::DecoyCore, Trans::DecoyCoreDesc, core, 6.0f);
+	//}
 	{ //Auxilliary Core
 		CGridButton@ button = AddBlock(this, menu, "secondarycore", "$SECONDARYCORE$", Trans::Auxilliary, Trans::AuxillDesc, core, 12.0f);
 		if (isStation)
@@ -548,16 +548,13 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 			button.SetEnabled(false);
 			button.hoverText += "\nOnly available at your Mothership.\n";
 		}
-		{ //Mortar
-			description = Trans::MortarDesc+"\n"+Trans::AmmoCap+": 5";
-			AddBlock(this, menu, "mortar", "$MORTAR$", Trans::Mortar, description, core, 6.0f, warmup);
-		}
-	}
-	{ //Bomb
-		AddBlock(this, menu, "bomb", "$BOMB$", Trans::Bomb, Trans::BombDesc, core, 2.0f, warmup);
+
 	}
 	{ //Ram Hull
 		AddBlock(this, menu, "ram", "$RAM$", Trans::Ram, Trans::RamDesc, core, 2.0f, warmup);
+	}
+	{ //Bomb
+		AddBlock(this, menu, "bomb", "$BOMB$", Trans::Bomb, Trans::BombDesc, core, 2.0f, warmup);
 	}
 	{ //Machinegun
 		description = Trans::MGDesc+"\n"+Trans::AmmoCap+": 250";
@@ -579,6 +576,10 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		description = Trans::LauncherDesc+"\n"+Trans::AmmoCap+": 8";
 		AddBlock(this, menu, "launcher", "$LAUNCHER$", Trans::Launcher, description, core, 4.5f, warmup);
 	}
+	{ //Mortar
+		description = "Mortar"+"\n"+Trans::AmmoCap+": 5";
+		AddBlock(this, menu, "mortar", "$MORTAR$", "Mortar", description, core, 6.0f, warmup);
+	}
 }
 
 // Add a block to the build menu
@@ -593,6 +594,7 @@ CGridButton@ AddBlock(CBlob@ this, CGridMenu@ menu, const string&in block, const
 	params.write_bool(false);
 	
 	CGridButton@ button = menu.AddButton(icon, bname + " $" + cost, core.getCommandID("buyBlock"), params);
+	if (button is null) return null;
 
 	const bool selected = this.get_string("last buy") == block;
 	if (selected) button.SetSelected(2);

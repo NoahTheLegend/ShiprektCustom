@@ -25,6 +25,6 @@ void onRender(CSprite@ this)
         if (dist <= distance)
             GUI::DrawIcon("MortarAim.png", Vec2f(-18.5, -18.5)+mspos);
         else // set icon to max distance radius border
-            GUI::DrawIcon("MortarAim.png", Vec2f(-18.5, -18.5)+Vec2f(scrw/2, scrh/2)-aimVector*(distance+distance/2.5)); // otherwise wrong icon placement distance, idk why
+            GUI::DrawIcon("MortarAim.png", Vec2f(-18.5, -18.5)+Vec2f(scrw/2, scrh/2)-aimVector*(distance+distance/4)); // otherwise wrong icon placement distance, idk why
     }   // -18.5 is offset to center of the cursor
 }

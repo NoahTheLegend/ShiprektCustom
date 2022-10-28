@@ -4,9 +4,9 @@
 #include "Hitters.as";
 #include "PlankCommon.as";
 
-const f32 EXPLODE_RADIUS = 4.0f;
-const f32 MORTAR_REACH = 50.0f;
-const f32 SHELL_BASE_DAMAGE = 1.0f;
+const f32 SPLASH_RADIUS = 10.0f;
+const f32 SPLASH_DAMAGE = 2.25f;
+const f32 MORTAR_REACH = 4.0f;
 
 void onInit(CBlob@ this)
 {
@@ -114,15 +114,21 @@ void onDie(CBlob@ this)
 		}
 	}
 
-	if (isServer() && !this.hasTag("noMortarBoom")) 	
-		mortar(this);
-
-	if (this.getShape().getVars().customData > 0)
-    {
-        this.getSprite().Gib();
-		if (!this.hasTag("disabled"))
-			Explode(this);
-    }
+	if (isServer())
+	{
+		//splash damage
+		CBlob@[] blobsInRadius;
+		if (getMap().getBlobsInRadius(pos, SPLASH_RADIUS, @blobsInRadius))
+		{
+			const u8 blobsLength = blobsInRadius.length;
+			for (u8 i = 0; i < blobsLength; i++)
+			{
+				CBlob@ b = blobsInRadius[i];
+				if (!b.hasTag("hasSeat") && !b.hasTag("mothership") && b.hasTag("block") && b.getShape().getVars().customData > 0)
+					this.server_Hit(b, Vec2f_zero, Vec2f_zero, getDamage(b) * SPLASH_DAMAGE, Hitters::explosion, false);
+			}
+		}
+	}
 }
 
 void Explode(CBlob@ this, f32 radius = EXPLODE_RADIUS)
