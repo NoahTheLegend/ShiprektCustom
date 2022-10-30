@@ -5,12 +5,12 @@
 
 const f32 PROJECTILE_SPEED = 3.0f; // change on your own risk! Scaling sprite time dependencies!
 const f32 PROJECTILE_SPREAD = 0.5;
-const int FIRE_RATE = 600;
+const int FIRE_RATE = 480;
 const f32 PROJECTILE_RANGE = 300.0f;
 const f32 CLONE_RADIUS = 20.0f;
 
 // Max amount of ammunition
-const uint8 MAX_AMMO = 5;
+const uint8 MAX_AMMO = 8;
 
 // Amount of ammunition to refill when
 // connected to motherships and stations
@@ -18,11 +18,11 @@ const uint8 REFILL_AMOUNT = 1;
 
 // How often to refill when connected
 // to motherships and stations
-const uint8 REFILL_SECONDS = 30;
+const uint8 REFILL_SECONDS = 10;
 
 // How often to refill when connected
 // to secondary cores
-const uint8 REFILL_SECONDARY_CORE_SECONDS = 30;
+const uint8 REFILL_SECONDARY_CORE_SECONDS = 15;
 
 // Amount of ammunition to refill when
 // connected to secondary cores

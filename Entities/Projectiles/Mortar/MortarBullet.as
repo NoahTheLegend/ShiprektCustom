@@ -5,7 +5,7 @@
 #include "PlankCommon.as";
 
 const f32 SPLASH_RADIUS = 10.0f;
-const f32 SPLASH_DAMAGE = 2.25f;
+const f32 SPLASH_DAMAGE = 2.35f;
 const f32 MORTAR_REACH = 4.0f;
 
 void onInit(CBlob@ this)
