@@ -4,8 +4,8 @@
 #include "ShipsCommon.as";
 
 const f32 PROJECTILE_SPEED = 3.0f; // change on your own risk! Scaling sprite time dependencies!
-const f32 PROJECTILE_SPREAD = 0.5;
-const int FIRE_RATE = 480;
+const f32 PROJECTILE_SPREAD = 0.4;
+const int FIRE_RATE = 420; //210 - 7 seconds
 const f32 PROJECTILE_RANGE = 300.0f;
 const f32 CLONE_RADIUS = 20.0f;
 
@@ -41,7 +41,7 @@ void onInit(CBlob@ this)
 	this.set_u8("seat icon", 7);
 	this.set_f32("distance", PROJECTILE_RANGE);
 	
-	this.set_f32("weight", 6.0f);
+	this.set_f32("weight", 5.0f);
 	
 	this.addCommandID("fire");
 

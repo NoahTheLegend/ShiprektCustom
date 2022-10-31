@@ -577,8 +577,8 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		AddBlock(this, menu, "launcher", "$LAUNCHER$", Trans::Launcher, description, core, 4.5f, warmup);
 	}
 	{ //Mortar
-		description = "Mortar"+"\n"+Trans::AmmoCap+": 5";
-		AddBlock(this, menu, "mortar", "$MORTAR$", "Mortar", description, core, 6.0f, warmup);
+		description = "Mortar"+"\n"+Trans::AmmoCap+": 8";
+		AddBlock(this, menu, "mortar", "$MORTAR$", "Mortar", description, core, 5.0f, warmup);
 	}
 }
 
