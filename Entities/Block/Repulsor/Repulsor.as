@@ -71,7 +71,7 @@ void Repulse(CBlob@ this)
 		if (ship !is null && ship.mass > 0.0f)
 		{
 			f32 pushMultiplier = b.hasTag("engine") ? 1.5f : 1.0f; //engines get pushed more
-			if (b.getName() == "bomb") pushMultiplier = 0.45f;
+			if (b.getName() == "bomb") pushMultiplier = 0.65f;
 			const f32 pushDistance = (b.getPosition() - pos).getLength();
 			const Vec2f pushVel = (b.getPosition() - pos) * (1 - (pushDistance/(PUSH_RADIUS*1.5f))) * PUSH_FACTOR/3*pushMultiplier/ship.mass;
 			//use ship.centerBlock.getPosition() instead of  b.getPosition()?
