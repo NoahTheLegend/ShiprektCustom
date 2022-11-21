@@ -7,19 +7,19 @@ void onInit(CRules@ this)
 	this.set_string("version", "1.52.2");
 	
 	//dedicated server name
-	const string server_name = "[EU] Shiprekt++ : Lagless Waters ("+this.get_string("version")+")";
+	//const string server_name = "[EU] Shiprekt++ : Lagless Waters ("+this.get_string("version")+")";
 	
-	if (sv_name != server_name)
-	{
-		if (isServer())
-		{
-			warn("\nServer name overwritten!\n" +
-				 "Previous : " + sv_name + "\n" +
-				 "Current  : " + server_name + "\n" +
-				 "Change your server's name (if desired) at " + getCurrentScriptName() + "\n");
-		}
-		sv_name = server_name;
-	}
+	//if (sv_name != server_name)
+	//{
+	//	if (isServer())
+	//	{
+	//		warn("\nServer name overwritten!\n" +
+	//			 "Previous : " + sv_name + "\n" +
+	//			 "Current  : " + server_name + "\n" +
+	//			 "Change your server's name (if desired) at " + getCurrentScriptName() + "\n");
+	//	}
+	//	sv_name = server_name;
+	//}
 	
 	//mod support
 	sv_contact_info = "github.com/Gingerbeard5773/shiprekt"; //if red circles appear, this link will show
@@ -64,6 +64,7 @@ void onInit(CRules@ this)
 	AddIconToken("$RAM$", "Ram.png", Vec2f(8,8), 0);
 	AddIconToken("$PROPELLER$", "PropellerIcons.png", Vec2f(16,16), 0);
 	AddIconToken("$RAMENGINE$", "PropellerIcons.png", Vec2f(16,16), 1);
+	AddIconToken("$BOOSTER$", "PropellerIcons.png", Vec2f(16,16), 2);
 	AddIconToken("$SEAT$", "Seat.png", Vec2f(8,8), 0);
 	AddIconToken("$BOMB$", "Bomb.png", Vec2f(8,8), 0);
 	AddIconToken("$HARVESTER$", "Harvester.png", Vec2f(16,16), 0);

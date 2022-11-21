@@ -127,7 +127,7 @@ void onTick(CBlob@ this)
 			occupier.set_bool("drawCouplingsHelp", this.get_bool("canProduceCoupling"));
 
 			//gather couplings and flak
-			CBlob@[] couplings, flak;
+			CBlob@[] couplings, allBoosters, flak;
 			const u16 blocksLength = ship.blocks.length;
 			for (u16 i = 0; i < blocksLength; ++i)
 			{
@@ -140,6 +140,8 @@ void onTick(CBlob@ this)
 				//gather couplings
 				if (block.hasTag("coupling") && !block.hasTag("_coupling_hitspace"))
 					couplings.push_back(block);
+				else if (block.hasTag("booster"))
+					allBoosters.push_back(block);
 				else if (block.hasTag("flak"))
 					flak.push_back(block);
 			}
@@ -204,6 +206,26 @@ void onTick(CBlob@ this)
 						}
 					}
 				}
+
+				// boosters
+				CBlob@[] boosters;	
+				getBlobsByTag("booster", @boosters);
+				const u16 boosterLength = boosters.length;
+				for (u16 i = 0; i < boosterLength; ++i)
+				{
+					CBlob@ r = boosters[i];
+					const int color = r.getShape().getVars().customData;
+					if (r.hasTag("activated") || r.get_u32("cooldown") > getGameTime()) continue;
+					if (color > 0 && r.isOnScreen() && r.get_string("playerOwner") == occupierName || (isCaptain && seatColor == color))
+					{
+						CButton@ button = occupier.CreateGenericButton(8, Vec2f_zero, r, r.getCommandID("chainReaction"), "Activate");
+						if (button !is null)
+						{
+							button.enableRadius = 999.0f;
+							button.radius = 1.0f;
+						}
+					}
+				}
 				
 				//flak on ship: detach player
 				if (isCaptain)
@@ -247,13 +269,12 @@ void onTick(CBlob@ this)
 			//Release all couplings on spacebar + right click
 			if (space && HUD.hasButtons() && right_click)
 			{
-				for (u16 i = 0; i < couplingsLength; ++i)
+				for (u16 i = 0; i < allBoosters.length; ++i)
 				{
-					CBlob@ c = couplings[i];
-					if (c.get_string("playerOwner") == occupierName)
+					CBlob@ b = allBoosters[i];
+					if (b.get_string("playerOwner") == occupierName && !b.hasTag("activated") && b.get_u32("cooldown") < getGameTime())
 					{
-						c.Tag("_coupling_hitspace");
-						c.SendCommand(c.getCommandID("decouple"));
+						b.SendCommand(b.getCommandID("chainReaction"));
 					}
 				}
 			}
@@ -375,6 +396,9 @@ void onTick(CBlob@ this)
 				for (u16 i = 0; i < upPropLength; ++i)
 				{
 					CBlob@ prop = getBlobByNetworkID(up_propellers[i]);
+					if (prop is null) continue;
+					if (prop.hasTag("booster") && !prop.hasTag("activated")) continue;
+
 					if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 					{
 						prop.set_u32("onTime", gameTime);
@@ -384,7 +408,10 @@ void onTick(CBlob@ this)
 				for (u16 i = 0; i < downPropLength; ++i)
 				{
 					CBlob@ prop = getBlobByNetworkID(down_propellers[i]);
-					if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+					if (prop is null) continue;
+					if (prop.hasTag("booster") && !prop.hasTag("activated")) continue;
+
+					if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 					{
 						prop.set_u32("onTime", gameTime);
 						prop.set_f32("power", down ? power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
@@ -401,7 +428,10 @@ void onTick(CBlob@ this)
 					for (u16 i = 0; i < leftPropLength; ++i)
 					{
 						CBlob@ prop = getBlobByNetworkID(left_propellers[i]);
-						if (prop !is null && seatColor == prop.getShape().getVars().customData &&  (teamInsensitive || occupierTeam == prop.getTeamNum()))
+						if (prop is null) continue;
+						if (prop.hasTag("booster") && !prop.hasTag("activated")) continue;
+
+						if (seatColor == prop.getShape().getVars().customData &&  (teamInsensitive || occupierTeam == prop.getTeamNum()))
 						{
 							prop.set_u32("onTime", gameTime);
 							prop.set_f32("power", left ? power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
@@ -410,7 +440,10 @@ void onTick(CBlob@ this)
 					for (u16 i = 0; i < rightPropLength; ++i)
 					{
 						CBlob@ prop = getBlobByNetworkID(right_propellers[i]);
-						if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+						if (prop is null) continue;
+						if (prop.hasTag("booster") && !prop.hasTag("activated")) continue;
+
+						if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 						{
 							prop.set_u32("onTime", gameTime);
 							prop.set_f32("power", right ? power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));

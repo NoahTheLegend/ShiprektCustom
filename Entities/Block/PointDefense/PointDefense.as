@@ -10,8 +10,8 @@ const f32 AUTO_RADIUS = 100.0f;
 
 const u8 MAX_AMMO = 15;
 const u8 REFILL_AMOUNT = 1;
-const u8 REFILL_SECONDS = 5;
-const u8 REFILL_SECONDARY_CORE_SECONDS = 10;
+const u8 REFILL_SECONDS = 4;
+const u8 REFILL_SECONDARY_CORE_SECONDS = 5;
 const u8 REFILL_SECONDARY_CORE_AMOUNT = 1;
 
 void onInit(CBlob@ this)
@@ -272,6 +272,8 @@ const f32 getDamage(CBlob@ hitBlob)
 		return 0.5f;
 	if (hitBlob.hasTag("projectile"))
 		return 1.0f;
+	if (hitBlob.hasTag("player"))
+		return 0.25f;
 
 	return 0.01f;//cores, solids
 }

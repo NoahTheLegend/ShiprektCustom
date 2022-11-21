@@ -10,6 +10,7 @@ void onInit(CBlob@ this)
 	this.addCommandID("on/off");
 	this.addCommandID("off");
 	this.addCommandID("stall");
+
 	this.Tag("engine");
 }
 

@@ -18,8 +18,8 @@ const u16 MOTHERSHIP_HEAL_COST = 10;
 const f32 BULLET_SPREAD = 0.2f;
 const f32 BULLET_SPEED = 9.0f;
 const f32 BULLET_RANGE = 350.0f;
-const Vec2f BUILD_MENU_SIZE = Vec2f(7, 3);
-const Vec2f BUILD_MENU_TEST = Vec2f(7, 3); //for testing, only activates when sv_test is on
+const Vec2f BUILD_MENU_SIZE = Vec2f(8, 3);
+const Vec2f BUILD_MENU_TEST = Vec2f(8, 3); //for testing, only activates when sv_test is on
 const Vec2f TOOLS_MENU_SIZE = Vec2f(2, 6);
 
 //global is fine since only used with isMyPlayer
@@ -511,20 +511,26 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Ram Engine
 		AddBlock(this, menu, "ramengine", "$RAMENGINE$", Trans::RamEngine, Trans::RamEngineDesc, core, 1.25f);
 	}
+	{ //Booster
+		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine, works for short time but with bigger power, although has a cooldown.", core, 1.5f);
+	}
 	{ //Coupling
 		AddBlock(this, menu, "coupling", "$COUPLING$", Trans::Coupling, Trans::CouplingDesc, core, 0.1f);
 	}
-	{ //Wooden Hull
-		AddBlock(this, menu, "solid", "$SOLID$", Trans::Hull, Trans::WoodHullDesc, core, 0.75f);
-	}
 	{ //Wooden Platform
 		AddBlock(this, menu, "platform", "$WOOD$", Trans::Platform, Trans::PlatformDesc, core, 0.2f);
+	}
+	{ //Wooden Hull
+		AddBlock(this, menu, "solid", "$SOLID$", Trans::Hull, Trans::WoodHullDesc, core, 0.75f);
 	}
 	{ //Wooden Door
 		AddBlock(this, menu, "door", "$DOOR$", Trans::Door, Trans::DoorDesc, core, 1.0f);
 	}
 	{ //Wooden Plank
 		AddBlock(this, menu, "plank", "$PLANK$", Trans::Plank, Trans::PlankDesc, core, 0.7f);
+	}
+	{ //Anti Ram
+		AddBlock(this, menu, "antiram", "$antiram$", Trans::AntiRam, Trans::AntiRamDesc, core, 0.85f);
 	}
 	{ //Harpoon
 		AddBlock(this, menu, "harpoon", "$HARPOON$", Trans::Harpoon, Trans::HarpoonDesc, core, 2.0f);
@@ -538,9 +544,9 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Repulsor
 		AddBlock(this, menu, "repulsor", "$REPULSOR$", Trans::Repulsor, Trans::RepulsorDesc, core, 0.25f);
 	}
-	//{ //Decoy Core
-	//	AddBlock(this, menu, "decoycore", "$DECOYCORE$", Trans::DecoyCore, Trans::DecoyCoreDesc, core, 6.0f);
-	//}
+	{ //Decoy Core
+		AddBlock(this, menu, "decoycore", "$DECOYCORE$", Trans::DecoyCore, Trans::DecoyCoreDesc, core, 6.0f);
+	}
 	{ //Auxilliary Core
 		CGridButton@ button = AddBlock(this, menu, "secondarycore", "$SECONDARYCORE$", Trans::Auxilliary, Trans::AuxillDesc, core, 12.0f);
 		if (isStation)
@@ -550,11 +556,11 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		}
 
 	}
-	{ //Ram Hull
-		AddBlock(this, menu, "ram", "$RAM$", Trans::Ram, Trans::RamDesc, core, 2.0f, warmup);
-	}
 	{ //Bomb
 		AddBlock(this, menu, "bomb", "$BOMB$", Trans::Bomb, Trans::BombDesc, core, 2.0f, warmup);
+	}
+	{ //Ram Hull
+		AddBlock(this, menu, "ram", "$RAM$", Trans::Ram, Trans::RamDesc, core, 2.0f, warmup);
 	}
 	{ //Machinegun
 		description = Trans::MGDesc+"\n"+Trans::AmmoCap+": 250";
