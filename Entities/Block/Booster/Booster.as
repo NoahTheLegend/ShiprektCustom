@@ -1,4 +1,4 @@
-f32 COOLDOWN_SECONDS = 7.5f;
+f32 COOLDOWN_SECONDS = 8.5f;
 
 void onInit(CBlob@ this)
 {
@@ -89,5 +89,5 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 	if (cmd == this.getCommandID("activate") && !this.hasTag("activated"))
 		Activate(this, params.read_u32());
 	else if (isServer() && cmd == this.getCommandID("chainReaction") && !this.hasTag("activated"))
-		ChainReaction(this, getGameTime() + 60);
+		ChainReaction(this, getGameTime() + 75);
 }
