@@ -512,7 +512,7 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		AddBlock(this, menu, "ramengine", "$RAMENGINE$", Trans::RamEngine, Trans::RamEngineDesc, core, 1.25f);
 	}
 	{ //Booster
-		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine, works for short time but with bigger power, although has a cooldown.", core, 1.5f);
+		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine, works for short time but with bigger power, although has a cooldown.\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.5f);
 	}
 	{ //Coupling
 		AddBlock(this, menu, "coupling", "$COUPLING$", Trans::Coupling, Trans::CouplingDesc, core, 0.1f);

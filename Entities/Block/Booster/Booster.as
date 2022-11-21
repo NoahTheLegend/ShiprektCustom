@@ -7,7 +7,7 @@ void onInit(CBlob@ this)
 	this.set_f32("weight", 1.5f);
 	
 	this.set_f32("power", 0.0f);
-	this.set_f32("powerFactor", 1.75f);
+	this.set_f32("powerFactor", 3.25f);
 	this.set_u32("onTime", 0);
 	this.set_u8("stallTime", 0);
 	this.set_u32("cooldown", 0);
@@ -37,12 +37,14 @@ void onInit(CBlob@ this)
 
 void onTick(CBlob@ this)
 {
+	f32 power = this.get_f32("power");
+
 	if (this.hasTag("activated"))
 	{
 		if (this.get_u32("workingTime") > getGameTime())
 		{
 			this.set_u32("onTime", getGameTime());
-			this.set_f32("power", this.get_f32("power") * this.get_f32("powerFactor"));
+			this.set_f32("power", power);
 		}
 		else
 		{
@@ -87,5 +89,5 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 	if (cmd == this.getCommandID("activate") && !this.hasTag("activated"))
 		Activate(this, params.read_u32());
 	else if (isServer() && cmd == this.getCommandID("chainReaction") && !this.hasTag("activated"))
-		ChainReaction(this, getGameTime() + 75);
+		ChainReaction(this, getGameTime() + 60);
 }
