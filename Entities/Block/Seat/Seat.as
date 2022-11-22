@@ -408,7 +408,6 @@ void onTick(CBlob@ this)
 				{
 					CBlob@ prop = getBlobByNetworkID(down_propellers[i]);
 					if (prop is null) continue;
-					if (prop.hasTag("booster") && !prop.hasTag("activated")) power *= 0.25;
 
 					if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 					{
@@ -428,7 +427,6 @@ void onTick(CBlob@ this)
 					{
 						CBlob@ prop = getBlobByNetworkID(left_propellers[i]);
 						if (prop is null) continue;
-						if (prop.hasTag("booster") && !prop.hasTag("activated")) power *= 0.25;
 
 						if (seatColor == prop.getShape().getVars().customData &&  (teamInsensitive || occupierTeam == prop.getTeamNum()))
 						{
@@ -440,7 +438,6 @@ void onTick(CBlob@ this)
 					{
 						CBlob@ prop = getBlobByNetworkID(right_propellers[i]);
 						if (prop is null) continue;
-						if (prop.hasTag("booster") && !prop.hasTag("activated")) power *= 0.25;
 
 						if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 						{
