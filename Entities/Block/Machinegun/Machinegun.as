@@ -6,7 +6,7 @@
 #include "ParticleSparks.as";
 #include "PlankCommon.as";
 
-const f32 BULLET_SPREAD = 2.5f;
+const f32 BULLET_SPREAD = 3.0f;
 const f32 BULLET_RANGE = 215.0F;
 const f32 MIN_FIRE_PAUSE = 2.85f; //min wait between shots
 const f32 MAX_FIRE_PAUSE = 8.0f; //max wait between shots
@@ -29,7 +29,6 @@ void onInit(CBlob@ this)
 	{
 		BootyRewards _booty_reward;
 		_booty_reward.addTagReward("bomb", 1);
-		_booty_reward.addTagReward("engine", 2);
 		@booty_reward = _booty_reward;
 	}
 	
@@ -347,9 +346,9 @@ const f32 getDamage(CBlob@ hitBlob)
 	f32 damage = 0.01f;
 
 	if (hitBlob.hasTag("ramengine"))
-		return 0.15f;
+		return 0.1f;
 	if (hitBlob.hasTag("propeller"))
-		return 0.075f;
+		return 0.05f;
 	if (hitBlob.hasTag("seat") || hitBlob.hasTag("plank"))
 		return 0.05f;
 	if (hitBlob.hasTag("decoyCore"))
@@ -359,7 +358,7 @@ const f32 getDamage(CBlob@ hitBlob)
 	if (hitBlob.hasTag("rocket"))
 		return 0.20f;
 	if (hitBlob.hasTag("weapon"))
-		return 0.05f;
+		return 0.025f;
 	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
 		return 0.2f;
 

@@ -397,24 +397,23 @@ void onTick(CBlob@ this)
 				{
 					CBlob@ prop = getBlobByNetworkID(up_propellers[i]);
 					if (prop is null) continue;
-					if (prop.hasTag("booster") && !prop.hasTag("activated")) continue;
 
 					if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 					{
 						prop.set_u32("onTime", gameTime);
-						prop.set_f32("power", up ? power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
+						prop.set_f32("power", up ? power * (prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor")) : reverse_power * (prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor")));
 					}
 				}
 				for (u16 i = 0; i < downPropLength; ++i)
 				{
 					CBlob@ prop = getBlobByNetworkID(down_propellers[i]);
 					if (prop is null) continue;
-					if (prop.hasTag("booster") && !prop.hasTag("activated")) continue;
+					if (prop.hasTag("booster") && !prop.hasTag("activated")) power *= 0.25;
 
 					if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 					{
 						prop.set_u32("onTime", gameTime);
-						prop.set_f32("power", down ? power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
+						prop.set_f32("power", down ? power * (prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor")) : reverse_power *(prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor")));
 					}
 				}
 			}
@@ -429,24 +428,24 @@ void onTick(CBlob@ this)
 					{
 						CBlob@ prop = getBlobByNetworkID(left_propellers[i]);
 						if (prop is null) continue;
-						if (prop.hasTag("booster") && !prop.hasTag("activated")) continue;
+						if (prop.hasTag("booster") && !prop.hasTag("activated")) power *= 0.25;
 
 						if (seatColor == prop.getShape().getVars().customData &&  (teamInsensitive || occupierTeam == prop.getTeamNum()))
 						{
 							prop.set_u32("onTime", gameTime);
-							prop.set_f32("power", left ? power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
+							prop.set_f32("power", left ? power * (prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor")) : reverse_power * (prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor")));
 						}
 					}
 					for (u16 i = 0; i < rightPropLength; ++i)
 					{
 						CBlob@ prop = getBlobByNetworkID(right_propellers[i]);
 						if (prop is null) continue;
-						if (prop.hasTag("booster") && !prop.hasTag("activated")) continue;
+						if (prop.hasTag("booster") && !prop.hasTag("activated")) power *= 0.25;
 
 						if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 						{
 							prop.set_u32("onTime", gameTime);
-							prop.set_f32("power", right ? power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
+							prop.set_f32("power", right ? power * (prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor")) : reverse_power * (prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor")));
 						}
 					}
 				}

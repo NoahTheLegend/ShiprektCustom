@@ -1,10 +1,10 @@
-f32 COOLDOWN_SECONDS = 8.5f;
+f32 COOLDOWN_SECONDS = 15.0f;
 
 void onInit(CBlob@ this)
 {
 	this.Tag("solid");
 	
-	this.set_f32("weight", 1.5f);
+	this.set_f32("weight", 1.35f);
 	
 	this.set_f32("power", 0.0f);
 	this.set_f32("powerFactor", 3.25f);
@@ -89,5 +89,5 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 	if (cmd == this.getCommandID("activate") && !this.hasTag("activated"))
 		Activate(this, params.read_u32());
 	else if (isServer() && cmd == this.getCommandID("chainReaction") && !this.hasTag("activated"))
-		ChainReaction(this, getGameTime() + 75);
+		ChainReaction(this, getGameTime() + 150);
 }
