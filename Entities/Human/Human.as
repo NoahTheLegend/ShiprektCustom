@@ -512,7 +512,7 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		AddBlock(this, menu, "ramengine", "$RAMENGINE$", Trans::RamEngine, Trans::RamEngineDesc, core, 1.25f);
 	}
 	{ //Booster
-		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine with short boost with a cooldown, when not activated can move slightly slower than regular engines.\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.35f);
+		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine, has short a boost with a cooldown, when not activated can move forward but slower.\nBad for steering if it's not active, and excellent if is.\n\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.35f);
 	}
 	{ //Coupling
 		AddBlock(this, menu, "coupling", "$COUPLING$", Trans::Coupling, Trans::CouplingDesc, core, 0.1f);
