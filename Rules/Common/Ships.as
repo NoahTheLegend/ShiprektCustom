@@ -1060,7 +1060,7 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 		u16 count;
 		if (!params.saferead_u16(count))
 		{
-			warn("ships update (CMD): count not found");
+			//warn("ships update (CMD): count not found");
 			return;
 		}
 		
@@ -1071,7 +1071,7 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 		{
 			//onNewPlayerJoin is called with a delay after a player joins, which triggers this warning
 			if (sv_test)
-				warn("ships update received before ships sync (CMD): SERVER [" +count+ "] , CLIENT [" +ships.length+ "]");
+				//warn("ships update received before ships sync (CMD): SERVER [" +count+ "] , CLIENT [" +ships.length+ "]");
 			return;
 		}
 		
@@ -1082,7 +1082,7 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 				Ship@ ship = ships[i];
 				if (ship is null)
 				{
-					warn("ships update (CMD): ship not found ["+i+"]");
+					//warn("ships update (CMD): ship not found ["+i+"]");
 					return;
 				}
 				
