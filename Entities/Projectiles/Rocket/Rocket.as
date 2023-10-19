@@ -1,6 +1,6 @@
 #include "DamageBooty.as";
 #include "AccurateSoundPlay.as";
-#include "ParticleSparks.as";
+#include "ParticleSpark.as";
 #include "Hitters.as";
 #include "PlankCommon.as";
 
@@ -11,7 +11,7 @@ const f32 SPLASH_DAMAGE = 0.5f;
 const f32 ROCKET_FORCE = 7.5f;
 const int ROCKET_DELAY = 15;
 const f32 ROTATION_SPEED = 3.0;
-const f32 GUIDANCE_RANGE = 9999.0f;
+const f32 GUIDANCE_RANGE = 225.0f;
 
 Random _effectspreadrandom(0x11598); //clientside
 

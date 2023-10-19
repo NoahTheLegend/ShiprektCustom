@@ -128,15 +128,11 @@ void onRender(CRules@ this)
 		//PAGE 1
 		const string shiprektVersion = "Shiprekt++ "+Trans::Version+" "+this.get_string("version")+"\n";
 		const string lastChangesInfo = Trans::LastChanges+":\n"
-		+ "- Custom changes by NoahTheLegend:\n"
-		+ "  * Different ship types on match start.\n"
-		+ "  * Bombs give less coins on hit.\n"
-		+ "  * Point defense now deals much more damage to humans.\n"
-		+ "  * Cannon restock and projectile range buff.\n"
-		+ "  * Missiles' HP significantly nerfed.\n"
-		+ "  * Machineguns nerfed, but you can stack them in row (up to 2).\n"
-		+ "  * Added boosters and reverted antiram.\n"
-		+ "  * Harvesting blocks attached to stations is now longer.\n";
+		+ "- 7-25-2022 - By GoldenGuy & Gingerbeard\n"
+		+ "  * Smoother camera and improved visuals.\n"
+		+ "  * Fixed unaligned block cursor placement.\n"
+		+ "  * Flak firing is more accurate when manned.\n"
+		+ "  * Players shouldn't get randomly booted off their ship as much.\n";
 		
 		GUI::SetFont("menu");
 		Vec2f lastChangesSize;

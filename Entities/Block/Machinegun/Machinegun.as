@@ -3,11 +3,11 @@
 #include "DamageBooty.as";
 #include "AccurateSoundPlay.as";
 #include "Hitters.as";
-#include "ParticleSparks.as";
+#include "ParticleSpark.as";
 #include "PlankCommon.as";
 
-const f32 BULLET_SPREAD = 3.0f;
-const f32 BULLET_RANGE = 215.0F;
+const f32 BULLET_SPREAD = 2.5f;
+const f32 BULLET_RANGE = 240.0F;
 const f32 MIN_FIRE_PAUSE = 2.85f; //min wait between shots
 const f32 MAX_FIRE_PAUSE = 8.0f; //max wait between shots
 const f32 FIRE_PAUSE_RATE = 0.08f; //higher values = higher recover
@@ -15,9 +15,8 @@ const f32 FIRE_PAUSE_RATE = 0.08f; //higher values = higher recover
 const u8 MAX_AMMO = 250;
 const u8 REFILL_AMOUNT = 30;
 const u8 REFILL_SECONDS = 6;
-const u8 REFILL_SECONDARY_CORE_SECONDS = 8;
-const u8 REFILL_SECONDARY_CORE_AMOUNT = 30;
-const u8 MAX_OVERLAP_SHOOTING = 1; // amount of machineguns not blocking shooting
+const u8 REFILL_SECONDARY_CORE_SECONDS = 1;
+const u8 REFILL_SECONDARY_CORE_AMOUNT = 2;
 
 Random _shotspreadrandom(0x11598); //clientside
 
@@ -29,6 +28,7 @@ void onInit(CBlob@ this)
 	{
 		BootyRewards _booty_reward;
 		_booty_reward.addTagReward("bomb", 1);
+		_booty_reward.addTagReward("engine", 2);
 		@booty_reward = _booty_reward;
 	}
 	
@@ -201,8 +201,6 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 		if (map.getHitInfosFromRay(barrelPos, -aimVector.Angle(), BULLET_RANGE + rangeOffset, this, @hitInfos))
 		{
 			const u8 hitLength = hitInfos.length;
-			u8 overlap = MAX_OVERLAP_SHOOTING;
-
 			for (u8 i = 0; i < hitLength; i++)
 			{
 				HitInfo@ hi = hitInfos[i];
@@ -218,11 +216,6 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 				
 				if (b.hasTag("plank") && !CollidesWithPlank(b, aimVector))
 					continue;
-				if (overlap > 0 && b.getName() == "machinegun")
-				{
-					overlap--;
-					continue;
-				}
 
 				if (!b.hasTag("booty") && (bColor > 0 || !isBlock))
 				{
@@ -346,19 +339,19 @@ const f32 getDamage(CBlob@ hitBlob)
 	f32 damage = 0.01f;
 
 	if (hitBlob.hasTag("ramengine"))
-		return 0.1f;
+		return 0.25f;
 	if (hitBlob.hasTag("propeller"))
-		return 0.05f;
+		return 0.15f;
 	if (hitBlob.hasTag("seat") || hitBlob.hasTag("plank"))
 		return 0.05f;
 	if (hitBlob.hasTag("decoyCore"))
 		return 0.075f;
 	if (hitBlob.hasTag("bomb"))
-		return 0.25f;
+		return 0.4f;
 	if (hitBlob.hasTag("rocket"))
-		return 0.20f;
+		return 0.35f;
 	if (hitBlob.hasTag("weapon"))
-		return 0.025f;
+		return 0.075f;
 	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
 		return 0.2f;
 

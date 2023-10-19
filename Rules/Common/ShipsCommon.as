@@ -26,6 +26,16 @@ shared class Ship
 		soundsPlayed = 0;
 		owner = "";
 	}
+	
+	bool opEquals(Ship@ ship)
+	{
+		return this is ship;
+	}
+	
+	int opCmp(Ship@ ship)
+	{
+		return ship.blocks.length - blocks.length;
+	}
 };
 
 shared class ShipBlock
@@ -37,50 +47,43 @@ shared class ShipBlock
 
 shared class ShipDictionary
 {
-	s32[] IDs;
-	Ship@[] Ships;
-	
-	ShipDictionary() {}
-	
+	// we use this ShipDictionary instead of engine dictionary because using
+	// dictionary.delete & dictionary.getKeys() together causes an engine crash.
+	// if this ^ bug is fixed then this class can be scrapped and the engine dictionary should be used instead
+
+	dictionary ships;
+	Ship@[] allShips;
+
 	void setShip(const s32&in ID, Ship@ ship) // Set a ship object to the dictionary
 	{
-		IDs.push_back(ID);
-		Ships.push_back(ship);
+		ships.set(ID+"", @ship);
+		allShips.push_back(ship);
 	}
-	
+
 	Ship@ getShip(const s32&in ID) // Grab a ship object from the dictionary
 	{
-		const s32 Index = IDs.find(ID);
-		if (Index > -1)
-		{
-			return Ships[Index];
-		}
-			
-		//if (sv_test || isServer()) warn("ShipDictionary (get):: Ship ID ["+ID+"] does not exist! ["+getScriptStack()[0]+".as]");
-		return null;
+		Ship@ ship;
+		ships.get(ID+"", @ship);
+		return ship;
 	}
-	
+
 	void deleteAll() // Remove all entries
 	{
-		IDs.clear();
-		Ships.clear();
+		ships.deleteAll();
+		allShips.clear();
 	}
-	
-	void delete(const s32&in ID) // Delete an entry
+
+	void delete(Ship@ ship) // Delete an entry
 	{
-		const s32 Index = IDs.find(ID);
-		if (Index > -1)
-		{
-			IDs.erase(Index);
-			Ships.erase(Index);
-			return;
-		}
-		warn("ShipDictionary (delete):: Ship ID ["+ID+"] does not exist! ["+getScriptStack()[0]+".as]");
+		ships.delete(ship.id+"");
+		const s32 shipIndex = allShips.find(ship);
+		if (shipIndex > -1)
+			allShips.erase(shipIndex);
 	}
-	
+
 	const Ship@[] getShips() // Retrieve all ships inside the dictionary
 	{
-		return Ships;
+		return allShips;
 	}
 }
 
@@ -208,4 +211,15 @@ shared const bool shipLinked(CBlob@ this, CBlob@ goal, u16[]&in checked, u16[]&i
 		}
 	}
 	return false;
+}
+
+shared void server_setShipTeam(Ship@ ship, const int&in teamNum)
+{
+	const u16 blocksLength = ship.blocks.length;
+	for (u16 i = 0; i < blocksLength; ++i)
+	{
+		CBlob@ b = getBlobByNetworkID(ship.blocks[i].blobID);
+		if (b !is null)
+			b.server_setTeamNum(teamNum);
+	}
 }

@@ -3,7 +3,7 @@
 #include "Booty.as";
 #include "AccurateSoundPlay.as";
 #include "TileCommon.as";
-#include "ParticleSparks.as";
+#include "ParticleSpark.as";
 #include "BlockCosts.as";
 #include "PlankCommon.as";
  
@@ -125,10 +125,10 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 					if (!b.hasTag("mothership"))
 					{
 						f32 deconstructAmount = 0;
-						if (!bship.isStation && ((shipOwnerName.isEmpty() && !bship.isMothership) //true if no owner for ship and ship is not a mothership
+						if ((shipOwnerName.isEmpty() && !bship.isMothership) //true if no owner for ship and ship is not a mothership
 							|| (b.get_string("playerOwner").isEmpty() && !bship.isMothership) //true if no owner for the block and is not on a mothership
 							|| (shipOwnerName == player.getUsername()) //true if we own the ship
-							|| (b.get_string("playerOwner") == player.getUsername()))) //true if we own the specific block
+							|| (b.get_string("playerOwner") == player.getUsername())) //true if we own the specific block
 						{
 							deconstructAmount = fullConstructAmount; 
 						}

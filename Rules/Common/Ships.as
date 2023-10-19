@@ -44,9 +44,9 @@ void onRestart(CRules@ this)
 
 void onTick(CRules@ this)
 {
-	bool full_sync = false;
 	if (isServer())
 	{
+		bool full_sync = false;
 		const u32 gameTime = getGameTime();
 		if (gameTime < 2) return; //issues happen if ships generate on first tick
 		
@@ -71,7 +71,7 @@ void onTick(CRules@ this)
 			this.set_bool("dirty ships", false);
 		}
 
-		UpdateShips(this, true, full_sync);
+		UpdateShips(this);
 		Synchronize(this, full_sync);
 	}
 	else
@@ -139,19 +139,8 @@ void ConfigureToShip(CRules@ this, CBlob@[] blocks)
 			Ship@ ship = ShipSet.getShip(bCol);
 			if (ship is null || (b.getPosition() - block.getPosition()).LengthSquared() > 78)
 				continue;
-				
-			//shitty algorithm to make sure there is no duplicates
-			bool pushShip = true;
-			const u8 touchingShipsLength = touchingShips.length;
-			for (u8 p = 0; p < touchingShipsLength; p++)
-			{
-				if (ship.id == touchingShips[p].id)
-				{
-					pushShip = false;
-					break;
-				}
-			}
-			if (pushShip)
+			
+			if (touchingShips.find(ship) == -1)
 				touchingShips.push_back(ship);
 		}
 	}
@@ -188,52 +177,33 @@ void ConfigureToShip(CRules@ this, CBlob@[] blocks)
 	}
 }
 
-// Put two more more ships together into one
+// Put two or more ships together into one
 void CombineShips(CRules@ this, Ship@[] ships, CBlob@ connector)
 {
 	ShipDictionary@ ShipSet = getShipSet(this);
 	
-	Ship@ largestShip;
-	u16 blocksAmount = 0;
+	ships.sortAsc(); //sorts by ship size (refer to opCmp method)
 	
-	//find the largest ship and use it as the reference
+	Ship@ largestShip = ships[0];
+	ships.erase(0);
+	
+	//delete other ships
 	const u8 shipsLength = ships.length;
 	for (u8 i = 0; i < shipsLength; ++i)
 	{
 		Ship@ ship = ships[i];
-		const u16 blocksLength = ship.blocks.length;
-		if (blocksLength > blocksAmount)
+		//set all block colors to zero
+		const u16 shipBlocks = ship.blocks.length;
+		for (u16 q = 0; q < shipBlocks; ++q)
 		{
-			blocksAmount = blocksLength;
-			@largestShip = ship;
-		}
-	}
-	
-	if (largestShip is null)
-	{
-		warn("CombineShips: no reference ship found!");
-		return;
-	}
-	
-	//delete smaller ships
-	for (u8 i = 0; i < shipsLength; ++i)
-	{
-		Ship@ ship = ships[i];
-		if (ship.id != largestShip.id)
-		{
-			//set all block colors to zero
-			const u16 shipBlocks = ship.blocks.length;
-			for (u16 i = 0; i < shipBlocks; ++i)
-			{
-				CBlob@ b = getBlobByNetworkID(ship.blocks[i].blobID);
-				if (b is null) continue;
-				
-				b.set_u16("last color", 0);
-				b.getShape().getVars().customData = 0;
-			}
+			CBlob@ b = getBlobByNetworkID(ship.blocks[q].blobID);
+			if (b is null) continue;
 			
-			ShipSet.delete(ship.id);
+			b.set_u16("last color", 0);
+			b.getShape().getVars().customData = 0;
 		}
+		
+		ShipSet.delete(ship);
 	}
 	
 	ColorBlocks(connector, largestShip);
@@ -350,10 +320,8 @@ void ColorBlocks(CBlob@ this, Ship@ ship, CMap@ map = getMap())
 }
 
 // Sets information that doesn't need to be set every tick (centerblock, mass etc)
-void InitShip(Ship @ship)
-{
-	//if (!isServer()) print ("client: initializing ship: ["+ship.id+"]");
-	
+void InitShip(Ship@ ship)
+{	
 	Vec2f center;
 	const u16 blocksLength = ship.blocks.length;
 	if (ship.centerBlock is null) //when clients InitShip(), they should have key values pre-synced. no need to calculate
@@ -444,10 +412,9 @@ void InitShip(Ship @ship)
 }
 
 // Called every tick, this is what makes the ships move and function
-void UpdateShips(CRules@ this, const bool&in integrate = true, const bool&in forceOwnerSearch = false)
+void UpdateShips(CRules@ this, const bool&in integrate = true)
 {
 	CMap@ map = getMap();
-	const u32 gameTime = getGameTime();
 	ShipDictionary@ ShipSet = getShipSet(this);
 	Ship@[] ships = ShipSet.getShips();
 	
@@ -455,13 +422,13 @@ void UpdateShips(CRules@ this, const bool&in integrate = true, const bool&in for
 	for (u16 i = 0; i < shipsLength; ++i)
 	{
 		Ship@ ship = ships[i];
-		if (ship is null) return;
+		if (ship is null) continue;
 		
 		const u16 blocksLength = ship.blocks.length;
 		if (blocksLength <= 0)
 		{
 			warn("UpdateShips: no ship blocks found! Removing ID ["+ship.id+"]");
-			ShipSet.delete(ship.id);
+			ShipSet.delete(ship);
 			continue;
 		}
 
@@ -526,7 +493,7 @@ void UpdateShips(CRules@ this, const bool&in integrate = true, const bool&in for
 			}
 		}
 		
-		if (!isServer() || (!forceOwnerSearch && (gameTime + ship.id * 33) % 45 > 0)) //updateShipBlobs if !isServer OR isServer and not on a 'second tick'
+		if (!isServer() || (getGameTime() + ship.id * 33) % 45 != 0)
 		{
 			for (u16 q = 0; q < blocksLength; ++q)
 			{
@@ -537,7 +504,7 @@ void UpdateShips(CRules@ this, const bool&in integrate = true, const bool&in for
 				UpdateShipBlob(b, ship, ship_block);
 			}
 		}
-		else //(server) updateShipBlobs and find ship.owner once a second or after GenerateShips()
+		else //(server) find the ship's owner
 		{
 			CBlob@ core = null;
 			bool multiTeams = false;
@@ -576,46 +543,29 @@ void UpdateShips(CRules@ this, const bool&in integrate = true, const bool&in for
 				
 				if (multiTeams) // ship has multiple owners (e.g two connected motherships)
 					oldestSeatOwner = "*";
-				else if (ship.isMothership && core !is null)
+				else
 				{
+					//find the oldest seat available
+					const bool mothership = ship.isMothership && core !is null;
 					for (u8 q = 0; q < seatLength; q++)
 					{
 						CBlob@ oldestSeat = getBlobByNetworkID(seatIDs[q]);
 						u16[] checked, unchecked;
-						if (oldestSeat !is null && shipLinked(oldestSeat, core, checked, unchecked))
+						if (oldestSeat !is null && (mothership ? shipLinked(oldestSeat, core, checked, unchecked) : true))
 						{
 							oldestSeatOwner = oldestSeat.get_string("playerOwner");
 							break;
 						}
 					}
 				}
-				else
+
+				//change ship team (only non-motherships that have activated seats)
+				if (!ship.isMothership && !ship.isStation && !multiTeams && !oldestSeatOwner.isEmpty() && ship.owner != oldestSeatOwner)
 				{
-					//find the oldest seat available
-					for (u8 q = 0; q < seatLength; q++)
+					CPlayer@ oldestOwner = getPlayerByUsername(oldestSeatOwner);
+					if (oldestOwner !is null)
 					{
-						CBlob@ oldestSeat = getBlobByNetworkID(seatIDs[q]);
-						if (oldestSeat !is null)
-						{
-							oldestSeatOwner = oldestSeat.get_string("playerOwner");
-							break;
-						}
-					}
-				}
-			}
-			
-			//change ship team (only non-motherships that have activated seats)
-			if (!ship.isMothership && !ship.isStation && !multiTeams && !oldestSeatOwner.isEmpty() && ship.owner != oldestSeatOwner)
-			{
-				CPlayer@ iOwner = getPlayerByUsername(oldestSeatOwner);
-				if (iOwner !is null)
-				{
-					const u16 blocksLength = ship.blocks.length;
-					for (u16 i = 0; i < blocksLength; ++i)
-					{
-						CBlob@ b = getBlobByNetworkID(ship.blocks[i].blobID);
-						if (b !is null)
-							b.server_setTeamNum(iOwner.getTeamNum());
+						server_setShipTeam(ship, oldestOwner.getTeamNum());
 					}
 				}
 			}
@@ -735,7 +685,7 @@ void onBlobDie(CRules@ this, CBlob@ blob)
 	
 	if (ship.blocks.length <= 1) //no blocks left, kill ship
 	{
-		ShipSet.delete(ship.id);
+		ShipSet.delete(ship);
 		return;
 	}
 	
@@ -1060,7 +1010,7 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 		u16 count;
 		if (!params.saferead_u16(count))
 		{
-			//warn("ships update (CMD): count not found");
+			warn("ships update (CMD): count not found");
 			return;
 		}
 		
@@ -1071,7 +1021,7 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 		{
 			//onNewPlayerJoin is called with a delay after a player joins, which triggers this warning
 			if (sv_test)
-				//warn("ships update received before ships sync (CMD): SERVER [" +count+ "] , CLIENT [" +ships.length+ "]");
+				warn("ships update received before ships sync (CMD): SERVER [" +count+ "] , CLIENT [" +ships.length+ "]");
 			return;
 		}
 		
@@ -1082,7 +1032,7 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 				Ship@ ship = ships[i];
 				if (ship is null)
 				{
-					//warn("ships update (CMD): ship not found ["+i+"]");
+					warn("ships update (CMD): ship not found ["+i+"]");
 					return;
 				}
 				
@@ -1167,6 +1117,7 @@ void onRender(CRules@ this)
 	const f32 camRotation = camera.getRotation();
 	
 	ShipDictionary@ ShipSet = getShipSet(this);
+	if (ShipSet is null) return;
 	Ship@[] ships = ShipSet.getShips();
 	
 	const u16 shipsLength = ships.length;

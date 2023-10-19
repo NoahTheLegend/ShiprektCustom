@@ -2,13 +2,13 @@
 #include "DamageBooty.as";
 #include "AccurateSoundPlay.as";
 #include "TileCommon.as";
-#include "ParticleSparks.as";
+#include "ParticleSpark.as";
 #include "Hitters.as";
 #include "PlankCommon.as";
 
 const f32 SPLASH_RADIUS = 8.0f;
-const f32 SPLASH_DAMAGE = 0.225f;
-const f32 MAX_PIERCED = 1;
+const f32 SPLASH_DAMAGE = 0.25f;
+const f32 MAX_PIERCED = 2;
 
 BootyRewards@ booty_reward;
 
@@ -17,10 +17,10 @@ void onInit(CBlob@ this)
 	if (booty_reward is null)
 	{
 		BootyRewards _booty_reward;
-		_booty_reward.addTagReward("bomb", 2);
-		_booty_reward.addTagReward("engine", 1);
-		_booty_reward.addTagReward("weapon", 2);
-		_booty_reward.addTagReward("core", 4);
+		_booty_reward.addTagReward("bomb", 8);
+		_booty_reward.addTagReward("engine", 6);
+		_booty_reward.addTagReward("weapon", 8);
+		_booty_reward.addTagReward("core", 12);
 		@booty_reward = _booty_reward;
 	}
 
