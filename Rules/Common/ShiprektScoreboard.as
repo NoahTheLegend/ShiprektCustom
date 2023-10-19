@@ -58,7 +58,7 @@ float drawScoreboard(CPlayer@[] players, Vec2f topleft, const u8&in teamNum)
 	}
 
 	//draw team info
-	GUI::DrawText(teamColors[teamNum]+" "+Trans::Team+" ("+Trans::SuddenDeath+")", Vec2f(topleft.x, topleft.y), SColor(0xffffffff));
+	GUI::DrawText(teamColors[teamNum]+" "+Trans::Team+(team_with_mothership?"":"\n("+Trans::SuddenDeathSC+")"), Vec2f(topleft.x, topleft.y), SColor(0xffffffff));
 	GUI::DrawText(getTranslatedString("Players: {PLAYERCOUNT}").replace("{PLAYERCOUNT}", "" + playersLength), Vec2f(bottomright.x - 470, topleft.y), SColor(0xffffffff));
 
 	topleft.y += stepheight * 2;
