@@ -4,10 +4,10 @@ const u8 BUTTON_SIZE = 4;
 void onInit(CRules@ this)
 {
 	//mod version
-	this.set_string("version", "1.52.3");
+	this.set_string("version", "2.0.0");
 	
 	//dedicated server name
-	const string server_name = "[EU] Shiprekt++ ("+this.get_string("version")+")";
+	/*const string server_name = "[EU] Shiprekt++ ("+this.get_string("version")+")";
 	
 	if (sv_name != server_name)
 	{
@@ -19,19 +19,19 @@ void onInit(CRules@ this)
 				 "Change your server's name (if desired) at " + getCurrentScriptName() + "\n");
 		}
 		sv_name = server_name;
-	}
+	}*/
 	
 	//mod support
-	sv_contact_info = "github.com/Gingerbeard5773/shiprekt"; //if red circles appear, this link will show
+	sv_contact_info = "github.com/NoahTheLegend/ShiprektCustom"; //if red circles appear, this link will show
 	
-	print("\n      ------- INITIALIZING SHIPREKT ------- "+
+	/*print("\n      ------- INITIALIZING SHIPREKT ------- "+
 		  "\n" +
 		  "\n  Version: " + this.get_string("version") +
 		  "\n  Mod Page: " + sv_contact_info + 
 		  "\n  Localhost: " + (isServer() && isClient()) +
 		  "\n  Testing: " + sv_test +
 		  "\n" +
-		  "\n      ------------------------------------- \n", 0xff66C6FF);
+		  "\n      ------------------------------------- \n", 0xff66C6FF);*/
 	
 	//engine settings
 	particles_gravity.y = 0.0f;
@@ -64,6 +64,7 @@ void onInit(CRules@ this)
 	AddIconToken("$RAM$", "Ram.png", Vec2f(8,8), 0);
 	AddIconToken("$PROPELLER$", "PropellerIcons.png", Vec2f(16,16), 0);
 	AddIconToken("$RAMENGINE$", "PropellerIcons.png", Vec2f(16,16), 1);
+	AddIconToken("$BOOSTER$", "PropellerIcons.png", Vec2f(16,16), 2);
 	AddIconToken("$SEAT$", "Seat.png", Vec2f(8,8), 0);
 	AddIconToken("$BOMB$", "Bomb.png", Vec2f(8,8), 0);
 	AddIconToken("$HARVESTER$", "Harvester.png", Vec2f(16,16), 0);
@@ -74,6 +75,7 @@ void onInit(CRules@ this)
 	AddIconToken("$FLAK$", "Flak.png", Vec2f(16,16), 0);
 	AddIconToken("$POINTDEFENSE$", "PointDefense.png", Vec2f(16,16), 0);
 	AddIconToken("$LAUNCHER$", "Launcher.png", Vec2f(16,16), 0);
+	AddIconToken("$MORTAR$", "Mortar.png", Vec2f(16,16), 0);
 	AddIconToken("$COUPLING$", "Coupling.png", Vec2f(8,8), 0);
 	AddIconToken("$REPULSOR$", "Repulsor.png", Vec2f(8,8), 0);
 	AddIconToken("$SECONDARYCORE$", "SecondaryCore.png", Vec2f(8,8), 0);

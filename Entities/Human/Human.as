@@ -18,8 +18,8 @@ const u16 MOTHERSHIP_HEAL_COST = 10;
 const f32 BULLET_SPREAD = 0.2f;
 const f32 BULLET_SPEED = 9.0f;
 const f32 BULLET_RANGE = 350.0f;
-const Vec2f BUILD_MENU_SIZE = Vec2f(7, 3);
-const Vec2f BUILD_MENU_TEST = Vec2f(7, 3); //for testing, only activates when sv_test is on
+const Vec2f BUILD_MENU_SIZE = Vec2f(8, 3);
+const Vec2f BUILD_MENU_TEST = Vec2f(8, 3); //for testing, only activates when sv_test is on
 const Vec2f TOOLS_MENU_SIZE = Vec2f(2, 6);
 
 //global is fine since only used with isMyPlayer
@@ -143,7 +143,6 @@ void Move(CBlob@ this)
 		if (occupier !is null) @shipBlob = occupier;
 		
 		shape.getVars().onground = true;
-		this.set_bool("onGround", true);
 	}
 	
 	this.set_u16("shipBlobID", shipBlob !is null ? shipBlob.getNetworkID() : 0);
@@ -512,20 +511,26 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Ram Engine
 		AddBlock(this, menu, "ramengine", "$RAMENGINE$", Trans::RamEngine, Trans::RamEngineDesc, core, 1.25f);
 	}
+	{ //Booster
+		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine, has a short boost with cooldown after, although while not active able to forward, but slower.\n\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.35f);
+	}
 	{ //Coupling
 		AddBlock(this, menu, "coupling", "$COUPLING$", Trans::Coupling, Trans::CouplingDesc, core, 0.1f);
 	}
+	{ //Wooden Platform
+		AddBlock(this, menu, "platform", "$WOOD$", Trans::Platform, Trans::PlatformDesc, core, 0.6f);
+	}
 	{ //Wooden Hull
 		AddBlock(this, menu, "solid", "$SOLID$", Trans::Hull, Trans::WoodHullDesc, core, 0.75f);
-	}
-	{ //Wooden Platform
-		AddBlock(this, menu, "platform", "$WOOD$", Trans::Platform, Trans::PlatformDesc, core, 0.2f);
 	}
 	{ //Wooden Door
 		AddBlock(this, menu, "door", "$DOOR$", Trans::Door, Trans::DoorDesc, core, 1.0f);
 	}
 	{ //Wooden Plank
 		AddBlock(this, menu, "plank", "$PLANK$", Trans::Plank, Trans::PlankDesc, core, 0.7f);
+	}
+	{ //Anti Ram
+		AddBlock(this, menu, "antiram", "$antiram$", "Anti Ram", "Absorbs more damage from ramming than other blocks.", core, 0.85f);
 	}
 	{ //Harpoon
 		AddBlock(this, menu, "harpoon", "$HARPOON$", Trans::Harpoon, Trans::HarpoonDesc, core, 2.0f);
@@ -549,6 +554,7 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 			button.SetEnabled(false);
 			button.hoverText += "\nOnly available at your Mothership.\n";
 		}
+
 	}
 	{ //Bomb
 		AddBlock(this, menu, "bomb", "$BOMB$", Trans::Bomb, Trans::BombDesc, core, 2.0f, warmup);
@@ -576,6 +582,10 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		description = Trans::LauncherDesc+"\n"+Trans::AmmoCap+": 8";
 		AddBlock(this, menu, "launcher", "$LAUNCHER$", Trans::Launcher, description, core, 4.5f, warmup);
 	}
+	{ //Mortar
+		description = "Mortar"+"\n"+Trans::AmmoCap+": 8";
+		AddBlock(this, menu, "mortar", "$MORTAR$", "Mortar", description, core, 5.0f, warmup);
+	}
 }
 
 // Add a block to the build menu
@@ -590,6 +600,7 @@ CGridButton@ AddBlock(CBlob@ this, CGridMenu@ menu, const string&in block, const
 	params.write_bool(false);
 	
 	CGridButton@ button = menu.AddButton(icon, bname + " $" + cost, core.getCommandID("buyBlock"), params);
+	if (button is null) return null;
 
 	const bool selected = this.get_string("last buy") == block;
 	if (selected) button.SetSelected(2);

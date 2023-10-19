@@ -2,14 +2,14 @@
 #include "AccurateSoundPlay.as";
 #include "ParticleSpark.as";
 
-const f32 PROJECTILE_RANGE = 375.0F;
-const f32 PROJECTILE_SPEED = 15.0f;;
-const u16 FIRE_RATE = 170;//max wait between shots
+const f32 PROJECTILE_RANGE = 450.0F;
+const f32 PROJECTILE_SPEED = 13.0f;;
+const u16 FIRE_RATE = 225;//max wait between shots - 7 sec
 
-const u8 MAX_AMMO = 10;
+const u8 MAX_AMMO = 6;
 const u8 REFILL_AMOUNT = 1;
-const u8 REFILL_SECONDS = 5;
-const u8 REFILL_SECONDARY_CORE_SECONDS = 12;
+const u8 REFILL_SECONDS = 6;
+const u8 REFILL_SECONDARY_CORE_SECONDS = 10;
 const u8 REFILL_SECONDARY_CORE_AMOUNT = 1;
 
 Random _shotrandom(0x15125); //clientside

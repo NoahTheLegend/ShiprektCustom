@@ -3,12 +3,12 @@
 #include "ParticleSpark.as";
 
 const f32 BULLET_SPEED = 3.0f;
-const int FIRE_RATE = 200;
+const int FIRE_RATE = 300;
 
-const u8 MAX_AMMO = 8;
+const u8 MAX_AMMO = 4;
 const u8 REFILL_AMOUNT = 1;
-const u8 REFILL_SECONDS = 8;
-const u8 REFILL_SECONDARY_CORE_SECONDS = 14;
+const u8 REFILL_SECONDS = 7;
+const u8 REFILL_SECONDARY_CORE_SECONDS = 12;
 const u8 REFILL_SECONDARY_CORE_AMOUNT = 1;
 
 Random _shotspreadrandom(0x11598); //clientside

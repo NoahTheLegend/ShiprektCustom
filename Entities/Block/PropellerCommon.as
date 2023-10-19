@@ -10,6 +10,7 @@ void onInit(CBlob@ this)
 	this.addCommandID("on/off");
 	this.addCommandID("off");
 	this.addCommandID("stall");
+
 	this.Tag("engine");
 }
 
@@ -171,7 +172,7 @@ f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitt
 
 void onHitBlob(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitBlob, u8 customData)
 {
-	if (isClient() && customData == 9 && damage > 0.0f)
+	if (isClient() && customData == 9)
 		directionalSoundPlay("propellerHit.ogg", worldPoint);
 }
 

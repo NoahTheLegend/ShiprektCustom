@@ -13,14 +13,14 @@ void onInit(CBlob@ this)
 	if (booty_reward is null)
 	{
 		BootyRewards _booty_reward;
-		_booty_reward.addTagReward("bomb", 20);
-		_booty_reward.addTagReward("mothership", 35);
-		_booty_reward.addTagReward("secondarycore", 25);
-		_booty_reward.addTagReward("weapon", 20);
-		_booty_reward.addTagReward("solid", 15);
-		_booty_reward.addTagReward("seat", 20);
+		_booty_reward.addTagReward("bomb", 10);
+		_booty_reward.addTagReward("mothership", 15);
+		_booty_reward.addTagReward("secondarycore", 10);
+		_booty_reward.addTagReward("weapon", 10);
+		_booty_reward.addTagReward("solid", 10);
+		_booty_reward.addTagReward("seat", 10);
 		_booty_reward.addTagReward("platform", 5);
-		_booty_reward.addTagReward("door", 15);
+		_booty_reward.addTagReward("door", 10);
 		@booty_reward = _booty_reward;
 	}
 	
