@@ -464,17 +464,23 @@ void selfDestruct(CBlob@ this)
 
 	const u8 teamNum = this.getTeamNum();
 
-	//kill team players
-	CBlob@[] humans;
-	getBlobsByName("human", @humans);
-	const u8 humansLength = humans.length;
-	for (u8 i = 0; i < humansLength; i++)
+	//kill team players but only if one team or less remains
+	CBlob@[] ms;
+	getBlobsByName("mothership", @ms);
+	if (ms.length <= 1)
 	{
-		CBlob@ human = humans[i];
-		if (human.getTeamNum() == teamNum)
-			this.server_Hit(human, human.getPosition(), Vec2f_zero, human.getInitialHealth(), 44, true);
-			//hitter set to 44 so human dies no matter what
+		CBlob@[] humans;
+		getBlobsByName("human", @humans);
+		const u8 humansLength = humans.length;
+		for (u8 i = 0; i < humansLength; i++)
+		{
+			CBlob@ human = humans[i];
+			if (human.getTeamNum() == teamNum)
+				this.server_Hit(human, human.getPosition(), Vec2f_zero, human.getInitialHealth(), 44, true);
+				//hitter set to 44 so human dies no matter what
+		}
 	}
+	
 
 	//blocks go neutral
 	CBlob@[] blocks;

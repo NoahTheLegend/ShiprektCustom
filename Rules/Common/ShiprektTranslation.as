@@ -71,7 +71,8 @@ namespace Trans
 	Ship          = Translate("Ship\\Корабль\\Navio\\Statek\\Bateau\\Navío"),
 	Speed         = Translate("Speed\\Скорость\\Velocidade\\Prędkość\\Vitesse\\Velocida"),
 	Weight        = Translate("Weight\\Вес\\Peso\\Ciężar\\Poids\\Peso"),
-	Team          = Translate("Team\\Комманда\\Time\\Zespół\\Équipe\\Equipo"),
+	Team          = Translate("Team\\Команда\\Time\\Zespół\\Équipe\\Equipo"),
+	SuddenDeath   = Translate("Sudden death\\Последнее желание\\Morte súbita\\Ostatnia śmierć\\Mort subite\\La muerte súbita");
 	
 	//Hud
 	CoreHealth    = Translate("Team Core Health\\Здоровье сердца комманды\\Vida do Núcleo do Time\\Podstawowa kondycja zespołu\\Vie du Noyaux de votre Équipe\\Salud del núcleo del equipo"),

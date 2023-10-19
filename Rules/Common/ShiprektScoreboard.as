@@ -40,8 +40,25 @@ float drawScoreboard(CPlayer@[] players, Vec2f topleft, const u8&in teamNum)
 
 	GUI::SetFont("menu");
 
+	bool team_with_mothership = false;
+	CBlob@[] ms;
+	getBlobsByName("mothership", @ms);
+	for (u8 i = 0; i < ms.length; i++)
+	{
+		if (ms[i] !is null && ms[i].getTeamNum() == teamNum)
+		{
+			team_with_mothership = true;
+			break;
+		}
+	}
+
+	if (!team_with_mothership)
+	{
+		GUI::DrawIcon("DeadTeamIcon.png", topleft + Vec2f(128, 0), 0.25f);
+	}
+
 	//draw team info
-	GUI::DrawText(teamColors[teamNum]+" "+Trans::Team, Vec2f(topleft.x, topleft.y), SColor(0xffffffff));
+	GUI::DrawText(teamColors[teamNum]+" "+Trans::Team+" ("+Trans::SuddenDeath+")", Vec2f(topleft.x, topleft.y), SColor(0xffffffff));
 	GUI::DrawText(getTranslatedString("Players: {PLAYERCOUNT}").replace("{PLAYERCOUNT}", "" + playersLength), Vec2f(bottomright.x - 470, topleft.y), SColor(0xffffffff));
 
 	topleft.y += stepheight * 2;
