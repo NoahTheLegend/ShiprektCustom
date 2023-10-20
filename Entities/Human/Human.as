@@ -580,7 +580,7 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	}
 	{ //Missile Launcher
 		description = Trans::LauncherDesc+"\n"+Trans::AmmoCap+": 8";
-		AddBlock(this, menu, "launcher", "$LAUNCHER$", Trans::Launcher, description, core, 4.5f, warmup);
+		AddBlock(this, menu, "torpedolauncher", "$LAUNCHER$", Trans::Launcher, description, core, 4.5f, warmup);
 	}
 	{ //Mortar
 		description = "Mortar"+"\n"+Trans::AmmoCap+": 8";

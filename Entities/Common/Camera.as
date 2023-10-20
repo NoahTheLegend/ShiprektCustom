@@ -84,7 +84,7 @@ void onSetPlayer(CBlob@ this, CPlayer@ player) // never runs on localhost, huh
 		camera.mousecamstyle = 1;
 		camera.targetDistance = 1.0f; // zoom factor
 		camera.posLag = 1.0f; // lag/smoothen the movement of the camera, carries outside of shiprekt for some reason
-		camera.setRotation(0.0f);
+		camera.setRotation(this.exists("camera_rotation")?this.get_f32("camera_rotation"):0.0f);
 		this.set_f32("camera_angle", 0.0f);
 		this.set_f32("camera_zoom", 1.0f);
 	}
@@ -122,5 +122,6 @@ void onRender(CSprite@ this)
 	if (angle_delta < -180.0f) angle -= 360.0f;
 
 	camera.setRotation(Maths::Lerp(angle, next_angle, getRenderApproximateCorrectionFactor()));
+	blob.set_f32("camera_rotation", camera.getRotation());
 	camera.targetDistance = Maths::Lerp(old_zoom, next_zoom, getRenderApproximateCorrectionFactor());
 }
