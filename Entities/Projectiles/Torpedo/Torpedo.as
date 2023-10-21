@@ -242,10 +242,7 @@ void onCollision(CBlob@ this, CBlob@ b, bool solid, Vec2f normal, Vec2f point1)
 			if (sameTeam || (b.hasTag("player") && b.isAttached()) || b.hasTag("projectile")) //don't hit
 				return;
 		}
-		
-		//f32 damageModifier = this.getDamageOwnerPlayer() !is null ? MANUAL_DAMAGE_MODIFIER : 1.0f;
-		this.server_Hit(b, point1, Vec2f_zero, getDamage(b) * (this.hasTag("killedTorpedo") ? 0.5f : 1), this.hasTag("killedTorpedo") ? Hitters::explosion : Hitters::bomb, true);
-		
+	
 		if (killed)
 		{
 			this.Tag("killedTorpedo"); //for instances of multiple collisions on same tick
@@ -303,9 +300,6 @@ void onHitBlob(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@
 
 f32 onHit(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitterBlob, u8 customData)
 {
-	const f32 spinFactor = this.getInitialHealth() - this.getHealth();
-	this.setAngularVelocity((float(XORRandom(30) - 15))*spinFactor);
-
 	if (this.getHealth() - damage <= 0.0f)
 		ResetPlayer(this);
 
