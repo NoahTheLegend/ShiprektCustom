@@ -56,10 +56,17 @@ void onInit(CBlob@ this)
 	}
 
 	this.set_u32("last smoke puff", 0);
+	this.server_SetTimeToDie(30.0f);
 }
 
 void onTick(CBlob@ this)
 {
+	if (this.getTimeToDie() <= 0.1f)
+	{
+		this.Tag("sunk");
+		this.server_Die();
+	}
+
 	if (this.getPlayer() is null && !this.hasTag("had_shooter"))
 	{
 		if (isServer() && this.getDamageOwnerPlayer() !is null)
@@ -76,7 +83,6 @@ void onTick(CBlob@ this)
 	CPlayer@ owner = this.getPlayer();
 	if (owner !is null && owner.isMyPlayer())
 	{
-		
 		if (this.getTickSinceCreated() > TORPEDO_DELAY)
 		{
 			f32 thisAngle = this.getAngleDegrees();
@@ -201,9 +207,7 @@ void onCollision(CBlob@ this, CBlob@ b, bool solid, Vec2f normal, Vec2f point1)
 	}
 	
 	if (!isServer() || this.getTickSinceCreated() <= 4) return;
-	
-	if (b.hasTag("plank") && !CollidesWithPlank(b, this.getVelocity()))
-		return;
+
 
 	bool killed = false;
 	
@@ -221,7 +225,7 @@ void onCollision(CBlob@ this, CBlob@ b, bool solid, Vec2f normal, Vec2f point1)
 	{
 		if (isBlock || b.hasTag("torpedo"))
 		{
-			if (b.hasTag("solid") || b.hasTag("door") ||
+			if (b.hasTag("solid") || b.hasTag("platform") || b.hasTag("door") ||
 				(!sameTeam && (b.hasTag("weapon") || b.hasTag("torpedo") || b.hasTag("bomb") || b.hasTag("core"))))
 				killed = true;
 			else if (b.hasTag("hasSeat") && !sameTeam)
@@ -332,6 +336,25 @@ void onDie(CBlob@ this)
 {
 	ResetPlayer(this);
 	Vec2f pos = this.getPosition();
+
+	if (this.hasTag("sunk"))
+	{
+		if (isClient())
+		{
+			if (!isInWater(pos))
+			{
+				sparks(pos + this.getVelocity(), v_fastrender ? 5 : 15, 2.5, 20);
+				directionalSoundPlay("MetalImpact" + (XORRandom(2) + 1), pos);
+			}
+			else if (this.getTouchingCount() <= 0)
+			{
+				MakeWaterParticle(pos, Vec2f_zero);
+				directionalSoundPlay("WaterSplashBall.ogg", pos);
+			}
+		}
+		
+		return;
+	}
 
 	if (isClient())
 	{

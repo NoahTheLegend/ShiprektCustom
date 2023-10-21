@@ -230,7 +230,7 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 
                 bullet.setVelocity(velocity + ship.vel);
 				bullet.setAngleDegrees(-aimvector.Angle() + 90.0f);
-                bullet.server_SetTimeToDie(TORPEDO_LIFETIME);
+                //bullet.server_SetTimeToDie(TORPEDO_LIFETIME); // set in projectile
             }
     	}
 

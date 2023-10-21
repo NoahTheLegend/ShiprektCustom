@@ -18,8 +18,8 @@ const u16 MOTHERSHIP_HEAL_COST = 10;
 const f32 BULLET_SPREAD = 0.2f;
 const f32 BULLET_SPEED = 9.0f;
 const f32 BULLET_RANGE = 350.0f;
-const Vec2f BUILD_MENU_SIZE = Vec2f(8, 3);
-const Vec2f BUILD_MENU_TEST = Vec2f(8, 3); //for testing, only activates when sv_test is on
+const Vec2f BUILD_MENU_SIZE = Vec2f(9, 3);
+const Vec2f BUILD_MENU_TEST = Vec2f(9, 3); //for testing, only activates when sv_test is on
 const Vec2f TOOLS_MENU_SIZE = Vec2f(2, 6);
 
 //global is fine since only used with isMyPlayer
@@ -532,9 +532,6 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Anti Ram
 		AddBlock(this, menu, "antiram", "$antiram$", "Anti Ram", "Absorbs more damage from ramming than other blocks.", core, 0.85f);
 	}
-	{ //Harpoon
-		AddBlock(this, menu, "harpoon", "$HARPOON$", Trans::Harpoon, Trans::HarpoonDesc, core, 2.0f);
-	}
 	{ //Harvester
 		AddBlock(this, menu, "harvester", "$HARVESTER$", Trans::Harvester, Trans::HarvesterDesc, core, 2.0f);
 	}
@@ -562,6 +559,9 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Ram Hull
 		AddBlock(this, menu, "ram", "$RAM$", Trans::Ram, Trans::RamDesc, core, 2.0f, warmup);
 	}
+	{ //Harpoon
+		AddBlock(this, menu, "harpoon", "$HARPOON$", Trans::Harpoon, Trans::HarpoonDesc, core, 2.0f);
+	}
 	{ //Machinegun
 		description = Trans::MGDesc+"\n"+Trans::AmmoCap+": 250";
 		AddBlock(this, menu, "machinegun", "$MACHINEGUN$", Trans::Machinegun, description, core, 2.0f, warmup);
@@ -578,13 +578,21 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		description = Trans::CannonDesc+"\n"+Trans::AmmoCap+": 10";
 		AddBlock(this, menu, "cannon", "$CANNON$", Trans::Cannon, description, core, 3.25f, warmup);
 	}
-	{ //Missile Launcher
-		description = Trans::LauncherDesc+"\n"+Trans::AmmoCap+": 8";
-		AddBlock(this, menu, "torpedolauncher", "$LAUNCHER$", Trans::Launcher, description, core, 4.5f, warmup);
+	{ //Hammer Cannon
+		description = "Hammer Cannon"+"\n"+Trans::AmmoCap+": 15";
+		AddBlock(this, menu, "hammer", "$HAMMERCANNON$", "Hammer Cannon", description, core, 3.5f, warmup);
 	}
 	{ //Mortar
 		description = "Mortar"+"\n"+Trans::AmmoCap+": 8";
 		AddBlock(this, menu, "mortar", "$MORTAR$", "Mortar", description, core, 5.0f, warmup);
+	}
+	{ //Missile Launcher
+		description = Trans::LauncherDesc+"\n"+Trans::AmmoCap+": 8";
+		AddBlock(this, menu, "launcher", "$LAUNCHER$", Trans::Launcher, description, core, 4.5f, warmup);
+	}
+	{ //Torpedo Launcher
+		description = "Launches a manually-operated heavy torpedo"+"\n"+Trans::AmmoCap+": 1";
+		AddBlock(this, menu, "torpedolauncher", "$TORPLAUNCHER$", "Torpedo Launcher", description, core, 5.0f, warmup);
 	}
 }
 

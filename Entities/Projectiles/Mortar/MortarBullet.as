@@ -3,6 +3,7 @@
 #include "ParticleSpark.as";
 #include "Hitters.as";
 #include "PlankCommon.as";
+#include "WaterEffects.as";
 
 const f32 SPLASH_RADIUS = 12.0f;
 const f32 SPLASH_DAMAGE = 2.25f;
@@ -108,17 +109,39 @@ void mortar(CBlob@ this)
 void onDie(CBlob@ this)
 {
 	Vec2f pos = this.getPosition();
-	
-	if (isClient())
+	bool hitwater = isInWater(pos);
+
+	CBlob@[] tiles;
+	if (getMap() !is null && getMap().getBlobsAtPosition(pos, @tiles))
 	{
-		directionalSoundPlay("FlakExp"+XORRandom(2), pos, 2.5f);
-		for (u8 i = 0; i < (v_fastrender ? 1 : 3); i++)
+		for (u8 i = 0; i < tiles.length; i++)
 		{
-			makeLargeExplosionParticle(pos + getRandomVelocity(90, 12, 360));
+			if (tiles[i] !is null && tiles[i].hasTag("block"))
+			{
+				hitwater = false;
+				break;
+			}
 		}
 	}
 
-	if (isServer())
+	if (isClient())
+	{
+		if (hitwater)
+		{
+			MakeWaterParticle(pos, Vec2f_zero);
+			directionalSoundPlay("WaterSplashBall.ogg", pos);
+		}
+		else
+		{
+			directionalSoundPlay("FlakExp"+XORRandom(2), pos, 2.5f);
+			for (u8 i = 0; i < (v_fastrender ? 1 : 3); i++)
+			{
+				makeLargeExplosionParticle(pos + getRandomVelocity(90, 12, 360));
+			}
+		}
+	}
+
+	if (isServer() && !hitwater)
 	{
 		//splash damage
 		CBlob@[] blobsInRadius;
