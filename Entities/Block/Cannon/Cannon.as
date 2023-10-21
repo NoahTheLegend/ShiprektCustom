@@ -174,6 +174,11 @@ const bool isClear(CBlob@ this)
 			CBlob@ b =  hitInfos[i].blob;
 			if (b is null || b is this) continue;
 
+			if (b.getName() == "cannon" && (b.getPosition()-this.getPosition()).Length()>=12.0f)
+			{
+				continue;
+			}
+
 			if (this.getShape().getVars().customData == b.getShape().getVars().customData && (b.hasTag("weapon") || (b.hasTag("solid") && !b.hasTag("plank")))) //same ship
 			{
 				return false;
