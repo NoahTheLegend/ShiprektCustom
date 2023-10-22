@@ -19,10 +19,10 @@ const uint8 REFILL_AMOUNT = 2;
 
 // How often to refill when connected
 // to motherships and stations
-const uint8 REFILL_SECONDS = 8;
+const uint8 REFILL_SECONDS = 5;
 // How often to refill when connected
 // to secondary cores
-const uint8 REFILL_SECONDARY_CORE_SECONDS = 5;
+const uint8 REFILL_SECONDARY_CORE_SECONDS = 3;
 
 // Amount of ammunition to refill when
 // connected to secondary cores
