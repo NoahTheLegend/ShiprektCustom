@@ -86,17 +86,17 @@ f32 getDamage(CBlob@ hitBlob)
 	if (hitBlob.hasTag("ram"))
 		return 2.0f;
 	if (hitBlob.hasTag("propeller"))
-		return 0.75f;
+		return 0.85f;
 	if (hitBlob.hasTag("antiram"))
 		return 1.0f;
 	if (hitBlob.hasTag("ramengine"))
-		return 1.0f;
+		return 1.25f;
 	if (hitBlob.hasTag("door"))
 		return 0.5f;
 	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
 		return 1.0f;
 	if (hitBlob.hasTag("seat") || hitBlob.hasTag("weapon"))
-		return 0.25f;
+		return 0.315f;
 	if (hitBlob.hasTag("mothership") || hitBlob.hasTag("secondaryCore"))
 		return 0.4f;
 	if (hitBlob.hasTag("decoycore"))
