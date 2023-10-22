@@ -197,10 +197,10 @@ void Explode(CBlob@ this, f32 radius = EXPLODE_RADIUS)
 f32 getDamage(CBlob@ hitBlob)
 {
 	if (hitBlob.hasTag("door"))
-		return 0.75f;
+		return 1.0f;
 	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
-		return 0.25f;
+		return 0.85f;
 	if (hitBlob.hasTag("seat") || hitBlob.hasTag("weapon") || hitBlob.hasTag("bomb") || hitBlob.hasTag("core"))
-		return 0.15f;
-	return 0.5f;
+		return 0.33f;
+	return 0.6f;
 }
