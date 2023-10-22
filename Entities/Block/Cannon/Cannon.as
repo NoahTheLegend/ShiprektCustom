@@ -11,6 +11,7 @@ const u8 REFILL_AMOUNT = 1;
 const u8 REFILL_SECONDS = 6;
 const u8 REFILL_SECONDARY_CORE_SECONDS = 10;
 const u8 REFILL_SECONDARY_CORE_AMOUNT = 1;
+const u8 MAX_OVERLAP_SHOOTING = 1;
 
 Random _shotrandom(0x15125); //clientside
 
@@ -164,6 +165,7 @@ void Fire(CBlob@ this, CBlob@ shooter)
 const bool isClear(CBlob@ this)
 {
 	Vec2f aimVector = Vec2f(1, 0).RotateBy(this.getAngleDegrees());
+	u8 overlap = MAX_OVERLAP_SHOOTING;
 
 	HitInfo@[] hitInfos;
 	if (getMap().getHitInfosFromRay(this.getPosition(), -aimVector.Angle(), 60.0f, this, @hitInfos))
@@ -174,8 +176,14 @@ const bool isClear(CBlob@ this)
 			CBlob@ b =  hitInfos[i].blob;
 			if (b is null || b is this) continue;
 
-			if (b.getName() == "cannon" && (b.getPosition()-this.getPosition()).Length()>=12.0f)
+			//if (b.getName() == "cannon" && (b.getPosition()-this.getPosition()).Length()>=12.0f)
+			//{
+			//	continue;
+			//}
+
+			if (overlap > 0 && b.getName() == "cannon")
 			{
+				overlap--;
 				continue;
 			}
 
