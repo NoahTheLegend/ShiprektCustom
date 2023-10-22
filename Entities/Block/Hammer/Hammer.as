@@ -11,7 +11,7 @@ const f32 p1_lifetime = 1.25f;
 const f32 p2_lifetime = 2.0f;
 
 // Max amount of ammunition
-const uint8 MAX_AMMO = 10;
+const uint8 MAX_AMMO = 20;
 
 // Amount of ammunition to refill when
 // connected to motherships and stations
