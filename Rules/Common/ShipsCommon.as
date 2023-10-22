@@ -10,6 +10,7 @@ shared class Ship
 	CBlob@ centerBlock;       //the block in the center of the entire ship
 	uint soundsPlayed;        //used in limiting sounds in propellers
 	string owner;             //username of the player who owns the ship
+	string copilot;           //username of the assistant player
 	bool isMothership;        //does the ship contain a mothership core?
 	bool isStation;           //does the ship contain a station?
 	bool isSecondaryCore;     //does the ship contain an auxiliary core?
@@ -25,6 +26,7 @@ shared class Ship
 		@centerBlock = null;
 		soundsPlayed = 0;
 		owner = "";
+		copilot = "";
 	}
 	
 	bool opEquals(Ship@ ship)
@@ -136,6 +138,22 @@ shared const string getCaptainName(const u8&in team, ShipDictionary@ ShipSet = g
 			Ship@ ship = ShipSet.getShip(coreCol);
 			if (ship !is null)
 				return ship.owner;
+		}
+	}
+	return "";
+}
+
+shared const string getCopilotName(const u8&in team, ShipDictionary@ ShipSet = getShipSet())
+{
+	CBlob@ core = getMothership(team);
+	if (core !is null)
+	{
+		const int coreCol = core.getShape().getVars().customData;
+		if (coreCol > 0)
+		{
+			Ship@ ship = ShipSet.getShip(coreCol);
+			if (ship !is null)
+				return ship.copilot;
 		}
 	}
 	return "";

@@ -8,6 +8,7 @@ void onInit(CBlob@ this)
 	
 	this.set_f32("power", 0.0f);
 	this.set_f32("powerFactor", 3.25f);
+	this.set_f32("initPowerFactor", this.get_f32("powerFactor"));
 	this.set_u32("onTime", 0);
 	this.set_u8("stallTime", 0);
 	this.set_u32("cooldown", 0);

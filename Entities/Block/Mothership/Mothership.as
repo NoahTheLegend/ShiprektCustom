@@ -324,7 +324,10 @@ void onTick(CBlob@ this)
 	const Vec2f pos = this.getPosition();
 	const u32 gameTime = getGameTime();
 	CRules@ rules = getRules();
-	//const int color = this.getShape().getVars().customData;
+	const int color = this.getShape().getVars().customData;
+
+	//Ship@ ship = getShipSet(rules).getShip(color);
+	//if (ship !is null) printf(ship.copilot+" | "+ship.owner);
 	
 	//repel
 	/*f32 hp = this.getHealth();

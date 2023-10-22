@@ -18,10 +18,10 @@ namespace CMap
 	{
 		color_main_spawn = 0xff00ffff,
 		color_station = 0xffff0000,
-		color_palmtree = 0xff009600
+		color_palmtree = 0xff009600,
+		color_cattail = 0xff33660d
 	};
 	
-	//
 	void SetupMap(CMap@ map, int width, int height)
 	{
 		map.CreateTileMap(width, height, 8.0f, "LandTiles.png");
@@ -70,6 +70,15 @@ namespace CMap
 			case color_palmtree:
 			{
 				CBlob@ palmtreeBlob = spawnBlob(map, "palmtree", offset, 255, false);	
+			
+				map.SetTile(offset, CMap::grass_inland + map_random.NextRanged(5));
+				map.AddTileFlag(offset, Tile::BACKGROUND);
+				map.AddTileFlag(offset, Tile::LIGHT_PASSES);
+				return;
+			}
+			case color_cattail:
+			{
+				CBlob@ catBlob = spawnBlob(map, "cattail", offset, 255, false);	
 			
 				map.SetTile(offset, CMap::grass_inland + map_random.NextRanged(5));
 				map.AddTileFlag(offset, Tile::BACKGROUND);
@@ -142,8 +151,7 @@ namespace CMap
 		RD_Water = pixel_RD == color_water,
 		LU_Water = pixel_LU == color_water,
 		LD_Water = pixel_LD == color_water;
-		
-		
+
 		if (pixel == color_sand) 
 		{
 			//SAND AND SHOAL BORDERS

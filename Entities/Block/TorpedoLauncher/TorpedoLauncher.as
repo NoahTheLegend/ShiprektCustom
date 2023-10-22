@@ -7,8 +7,8 @@ const int FIRE_RATE_MANUAL = 30;
 
 const u8 MAX_AMMO = 1;
 const u8 REFILL_AMOUNT = 1;
-const u8 REFILL_SECONDS = 45;
-const u8 REFILL_SECONDARY_CORE_SECONDS = 60;
+const u8 REFILL_SECONDS = 30; // consider this also as the delay for reload after shooting
+const u8 REFILL_SECONDARY_CORE_SECONDS = 40;
 const u8 REFILL_SECONDARY_CORE_AMOUNT = 1;
 const f32 TORPEDO_LIFETIME = 30;
 

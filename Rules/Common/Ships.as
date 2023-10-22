@@ -510,6 +510,7 @@ void UpdateShips(CRules@ this, const bool&in integrate = true)
 			bool multiTeams = false;
 			u8 teamComp = 255;	
 			u16[] seatIDs;
+			u16[] coseatIDs;
 			
 			for (u16 q = 0; q < blocksLength; ++q)
 			{
@@ -521,7 +522,8 @@ void UpdateShips(CRules@ this, const bool&in integrate = true)
 				
 				if (b.hasTag("control") && !b.get_string("playerOwner").isEmpty())
 				{
-					seatIDs.push_back(ship_block.blobID);
+					if (b.getName() == "seat") seatIDs.push_back(ship_block.blobID);
+					else if (b.getName() == "secondaryseat") coseatIDs.push_back(ship_block.blobID);
 					
 					if (teamComp == 255)
 						teamComp = b.getTeamNum();
@@ -571,6 +573,44 @@ void UpdateShips(CRules@ this, const bool&in integrate = true)
 			}
 			
 			ship.owner = oldestSeatOwner;
+
+			string oldestSeatCopilot = "";
+			
+			const u8 coseatLength = coseatIDs.length;
+			if (coseatLength > 0)
+			{
+				coseatIDs.sortAsc();
+				
+				if (multiTeams)
+					oldestSeatCopilot = "*";
+				else
+				{
+					//find the oldest seat available
+					const bool mothership = ship.isMothership && core !is null;
+					for (u8 q = 0; q < coseatLength; q++)
+					{
+						CBlob@ oldestSeat = getBlobByNetworkID(coseatIDs[q]);
+						u16[] checked, unchecked;
+						if (oldestSeat !is null && (mothership ? shipLinked(oldestSeat, core, checked, unchecked) : true))
+						{
+							oldestSeatCopilot = oldestSeat.get_string("playerOwner");
+							break;
+						}
+					}
+				}
+
+				//change ship team (only non-motherships that have activated seats)
+				if (!ship.isMothership && !ship.isStation && !multiTeams && !oldestSeatOwner.isEmpty() && ship.owner != oldestSeatOwner)
+				{
+					CPlayer@ oldestOwner = getPlayerByUsername(oldestSeatOwner);
+					if (oldestOwner !is null)
+					{
+						server_setShipTeam(ship, oldestOwner.getTeamNum());
+					}
+				}
+			}
+
+			ship.copilot = oldestSeatCopilot;
 		}
 		//if (!ship.owner.isEmpty()) print("updated ship " + ship.id + "; owner: " + ship.owner + "; mass: " + ship.mass);
 	}
@@ -778,10 +818,12 @@ const bool Serialize(CRules@ this, CBitStream@ stream, const bool&in full_sync)
 			//send all of a ship's info- ships sync
 			const u16 blocksLength = ship.blocks.length;
 			CPlayer@ owner = getPlayerByUsername(ship.owner);
+			CPlayer@ copilot = getPlayerByUsername(ship.copilot);
 			
 			stream.write_Vec2f(ship.pos);
 			stream.write_s32(ship.id);
 			stream.write_netid(owner !is null ? owner.getNetworkID() : 0);
+			stream.write_netid(copilot !is null ? copilot.getNetworkID() : 0);
 			stream.write_netid(ship.centerBlock !is null ? ship.centerBlock.getNetworkID() : 0);
 			stream.write_Vec2f(ship.vel);
 			stream.write_f32(ship.angle);
@@ -826,6 +868,8 @@ const bool Serialize(CRules@ this, CBitStream@ stream, const bool&in full_sync)
 				stream.write_bool(true);
 				CPlayer@ owner = getPlayerByUsername(ship.owner);
 				stream.write_netid(owner !is null ? owner.getNetworkID() : 0);
+				CPlayer@ copilot = getPlayerByUsername(ship.copilot);
+				stream.write_netid(copilot !is null ? copilot.getNetworkID() : 0);
 				if ((ship.net_pos - ship.pos).LengthSquared() > thresh) //position
 				{
 					stream.write_bool(true);
@@ -948,8 +992,11 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 			}
 			ship.id = params.read_s32();
 			const u16 ownerID = params.read_netid();
+			const u16 copilotID = params.read_netid();
 			CPlayer@ owner = ownerID != 0 ? getPlayerByNetworkId(ownerID) : null;
+			CPlayer@ copilot = copilotID != 0 ? getPlayerByNetworkId(copilotID) : null;
 			ship.owner = owner !is null ? owner.getUsername() : "";
+			ship.copilot = copilot !is null ? copilot.getUsername() : "";
 			const u16 centerBlockID = params.read_netid();
 			@ship.centerBlock = centerBlockID != 0 ? getBlobByNetworkID(centerBlockID) : null;
 			ship.vel = params.read_Vec2f();
@@ -1039,6 +1086,9 @@ void onCommand(CRules@ this, u8 cmd, CBitStream@ params)
 				const u16 ownerID = params.read_netid();
 				CPlayer@ owner = ownerID != 0 ? getPlayerByNetworkId(ownerID) : null;
 				ship.owner = owner !is null ? owner.getUsername() : "";
+				const u16 copilotID = params.read_netid();
+				CPlayer@ copilot = copilotID != 0 ? getPlayerByNetworkId(copilotID) : null;
+				ship.copilot = copilot !is null ? copilot.getUsername() : "";
 				if (params.read_bool()) //passed position thresh
 				{
 					Vec2f dDelta = params.read_Vec2f() - ship.pos;

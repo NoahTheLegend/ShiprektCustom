@@ -59,6 +59,8 @@ void onInit(CBlob@ this)
 	this.server_SetTimeToDie(30.0f);
 }
 
+Random _anglerandom(0x9090); //clientside
+
 void onTick(CBlob@ this)
 {
 	if (this.getTimeToDie() <= 0.1f)
@@ -79,24 +81,23 @@ void onTick(CBlob@ this)
 	Vec2f pos = this.getPosition();
 	const f32 angle = this.getAngleDegrees();
 	Vec2f aimvector = Vec2f(1,0).RotateBy(angle - 90.0f);
-
+	
 	CPlayer@ owner = this.getPlayer();
-	if (owner !is null && owner.isMyPlayer())
+	if (owner !is null)
 	{
 		if (this.getTickSinceCreated() > TORPEDO_DELAY)
 		{
 			f32 thisAngle = this.getAngleDegrees();
-			CControls@ c = getControls();
-			if (c.isKeyPressed(KEY_LBUTTON))
+			if (this.isKeyPressed(key_action1))
 			{
 				this.setAngleDegrees(thisAngle - ROTATION_SPEED);
 			}
-			if (c.isKeyPressed(KEY_RBUTTON))
+			if (this.isKeyPressed(key_action2))
 			{
 				this.setAngleDegrees(thisAngle + ROTATION_SPEED);
 			}
 		}
-		else if (getCamera() !is null)
+		else if (owner.isMyPlayer() && getCamera() !is null)
 		{
 			getCamera().setRotation(this.getAngleDegrees());
 		}
@@ -149,10 +150,15 @@ void onTick(CBlob@ this)
 			u32 lastSmokeTime = this.get_u32("last smoke puff");
 			const int ticksTillSmoke = v_fastrender ? 5 : 2;
 			const int diff = gametime - (lastSmokeTime + ticksTillSmoke);
+
+			if ((getGameTime() + this.getNetworkID()) % (v_fastrender ? 7 : 4) == 0)
+			{
+				MakeWaterWave(pos, Vec2f_zero, -this.getVelocity().Angle() + (_anglerandom.NextRanged(100) > 50 ? 180 : 0)); 
+			}
+
 			if (diff > 0)
 			{
 				MakeWaterParticle(this.getPosition()+Vec2f(0,8).RotateBy(this.getAngleDegrees()), Vec2f_zero);
-			
 				lastSmokeTime = gametime;
 				this.set_u32("last smoke puff", lastSmokeTime);
 			}

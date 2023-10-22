@@ -18,8 +18,8 @@ const u16 MOTHERSHIP_HEAL_COST = 10;
 const f32 BULLET_SPREAD = 0.2f;
 const f32 BULLET_SPEED = 9.0f;
 const f32 BULLET_RANGE = 350.0f;
-const Vec2f BUILD_MENU_SIZE = Vec2f(9, 3);
-const Vec2f BUILD_MENU_TEST = Vec2f(9, 3); //for testing, only activates when sv_test is on
+const Vec2f BUILD_MENU_SIZE = Vec2f(7, 4);
+const Vec2f BUILD_MENU_TEST = Vec2f(7, 4); //for testing, only activates when sv_test is on
 const Vec2f TOOLS_MENU_SIZE = Vec2f(2, 6);
 
 //global is fine since only used with isMyPlayer
@@ -512,10 +512,7 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		AddBlock(this, menu, "ramengine", "$RAMENGINE$", Trans::RamEngine, Trans::RamEngineDesc, core, 1.25f);
 	}
 	{ //Booster
-		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine, has a short boost with cooldown after activation, although while not active able to forward, but slower.\n\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.35f);
-	}
-	{ //Coupling
-		AddBlock(this, menu, "coupling", "$COUPLING$", Trans::Coupling, Trans::CouplingDesc, core, 0.1f);
+		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting propeller, has a short boost with cooldown after activation, although while not active able to forward, but slower.\n\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.35f);
 	}
 	{ //Wooden Platform
 		AddBlock(this, menu, "platform", "$WOOD$", Trans::Platform, Trans::PlatformDesc, core, 0.6f);
@@ -526,20 +523,20 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Wooden Door
 		AddBlock(this, menu, "door", "$DOOR$", Trans::Door, Trans::DoorDesc, core, 1.0f);
 	}
+	{ //Co-pilot seat
+		AddBlock(this, menu, "secondaryseat", "$COSEAT$", "Co-pilot Seat", "Secondary seat. Boosts active propellers if movement is synchronized, also allows to shoot weapons.", core, 0.5f);
+	}
+	{ //Coupling
+		AddBlock(this, menu, "coupling", "$COUPLING$", Trans::Coupling, Trans::CouplingDesc, core, 0.1f);
+	}
+	{ //Repulsor
+		AddBlock(this, menu, "repulsor", "$REPULSOR$", Trans::Repulsor, Trans::RepulsorDesc, core, 0.25f);
+	}
 	{ //Wooden Plank
 		AddBlock(this, menu, "plank", "$PLANK$", Trans::Plank, Trans::PlankDesc, core, 0.7f);
 	}
 	{ //Anti Ram
 		AddBlock(this, menu, "antiram", "$antiram$", "Anti Ram", "Absorbs more damage from ramming than other blocks.", core, 0.85f);
-	}
-	{ //Harvester
-		AddBlock(this, menu, "harvester", "$HARVESTER$", Trans::Harvester, Trans::HarvesterDesc, core, 2.0f);
-	}
-	{ //Patcher
-		AddBlock(this, menu, "patcher", "$PATCHER$", Trans::Patcher, Trans::PatcherDesc, core, 3.0f);
-	}
-	{ //Repulsor
-		AddBlock(this, menu, "repulsor", "$REPULSOR$", Trans::Repulsor, Trans::RepulsorDesc, core, 0.25f);
 	}
 	{ //Decoy Core
 		AddBlock(this, menu, "decoycore", "$DECOYCORE$", Trans::DecoyCore, Trans::DecoyCoreDesc, core, 6.0f);
@@ -552,6 +549,12 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 			button.hoverText += "\nOnly available at your Mothership.\n";
 		}
 	}
+	{ //Harvester
+		AddBlock(this, menu, "harvester", "$HARVESTER$", Trans::Harvester, Trans::HarvesterDesc, core, 2.0f);
+	}
+	{ //Patcher
+		AddBlock(this, menu, "patcher", "$PATCHER$", Trans::Patcher, Trans::PatcherDesc, core, 3.0f);
+	}
 	{ //Bomb
 		AddBlock(this, menu, "bomb", "$BOMB$", Trans::Bomb, Trans::BombDesc, core, 2.0f, warmup);
 	}
@@ -561,13 +564,6 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Barnacles (loader)
 		AddBlock(this, menu, "loader", "$LOADER$", "Barnacles Trap", "Overloads ships with extreme weight. A good way to slow down your enemy at close range.", core, 10.0f);
 	}
-	{ //Harpoon
-		AddBlock(this, menu, "harpoon", "$HARPOON$", Trans::Harpoon, Trans::HarpoonDesc, core, 2.0f);
-	}
-	{ //Machinegun
-		description = Trans::MGDesc+"\n"+Trans::AmmoCap+": 250";
-		AddBlock(this, menu, "machinegun", "$MACHINEGUN$", Trans::Machinegun, description, core, 2.0f, warmup);
-	}
 	{ //Point Defense
 		description = Trans::PointDefDesc+"\n"+Trans::AmmoCap+": 15";
 		AddBlock(this, menu, "pointdefense", "$POINTDEFENSE$", Trans::PointDefense, description, core, 3.5f, warmup);
@@ -575,6 +571,13 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 	{ //Flak
 		description = Trans::FlakDesc+"\n"+Trans::AmmoCap+": 15";
 		AddBlock(this, menu, "flak", "$FLAK$", Trans::FlakCannon, description, core, 2.5f, warmup);
+	}
+	{ //Harpoon
+		AddBlock(this, menu, "harpoon", "$HARPOON$", Trans::Harpoon, Trans::HarpoonDesc, core, 2.0f);
+	}
+	{ //Machinegun
+		description = Trans::MGDesc+"\n"+Trans::AmmoCap+": 250";
+		AddBlock(this, menu, "machinegun", "$MACHINEGUN$", Trans::Machinegun, description, core, 2.0f, warmup);
 	}
 	{ //AP Cannon
 		description = Trans::CannonDesc+"\n"+Trans::AmmoCap+": 10";
