@@ -165,13 +165,13 @@ const f32 getDamage(CBlob@ this, CBlob@ hitBlob)
 	if (hitBlob.hasTag("seat") || hitBlob.hasTag("plank"))
 		return 0.5f;
 	if (hitBlob.hasTag("weapon"))
-		return 0.35f;
+		return 0.4f;
 	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
 		return 0.5f;
 	if (hitBlob.hasTag("mothership"))
 		return 0.33f;
 
-	return 0.33f;
+	return 0.66f;
 }
 
 Random _sprk_r;

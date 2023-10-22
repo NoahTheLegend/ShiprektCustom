@@ -512,7 +512,7 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		AddBlock(this, menu, "ramengine", "$RAMENGINE$", Trans::RamEngine, Trans::RamEngineDesc, core, 1.25f);
 	}
 	{ //Booster
-		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting propeller, has a short boost with cooldown after activation, although while not active able to forward, but slower.\n\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.35f);
+		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting propeller, has a short boost with cooldown after activation, although while not active able to forward, but slower.\n\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.15f);
 	}
 	{ //Wooden Platform
 		AddBlock(this, menu, "platform", "$WOOD$", Trans::Platform, Trans::PlatformDesc, core, 0.6f);

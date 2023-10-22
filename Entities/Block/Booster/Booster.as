@@ -4,7 +4,7 @@ void onInit(CBlob@ this)
 {
 	this.Tag("solid");
 	
-	this.set_f32("weight", 1.35f);
+	this.set_f32("weight", 1.15f);
 	
 	this.set_f32("power", 0.0f);
 	this.set_f32("powerFactor", 3.25f);
