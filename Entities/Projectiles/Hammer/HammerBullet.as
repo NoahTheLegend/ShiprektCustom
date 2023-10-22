@@ -159,9 +159,9 @@ const f32 getDamage(CBlob@ this, CBlob@ hitBlob)
 	if (hitBlob.hasTag("bomb"))
 		return 2.0f;
 	if (hitBlob.hasTag("ramengine"))
-		return 1.25f;
+		return 1.5f;
 	if (hitBlob.hasTag("propeller"))
-		return 0.5f;
+		return 0.75f;
 	if (hitBlob.hasTag("seat") || hitBlob.hasTag("plank"))
 		return 0.5f;
 	if (hitBlob.hasTag("weapon"))
@@ -171,7 +171,7 @@ const f32 getDamage(CBlob@ this, CBlob@ hitBlob)
 	if (hitBlob.hasTag("mothership"))
 		return 0.33f;
 
-	return 0.25f;
+	return 0.33f;
 }
 
 Random _sprk_r;

@@ -2,13 +2,13 @@
 #include "AccurateSoundPlay.as";
 #include "ParticleSpark.as";
 
-const f32 PROJECTILE_SPEED = 9.0f;
+const f32 PROJECTILE_SPEED = 11.0f;
 const f32 PROJECTILE_SPREAD = 16.0f;
-const int FIRE_RATE = 60;
+const int FIRE_RATE = 75;
 const f32 PROJECTILE_RANGE = 450.0f;
 const f32 CLONE_RADIUS = 20.0f;
-const f32 p1_lifetime = 1.25f;
-const f32 p2_lifetime = 2.0f;
+const f32 p1_lifetime = 1.5f;
+const f32 p2_lifetime = 2.5f;
 
 // Max amount of ammunition
 const uint8 MAX_AMMO = 20;
@@ -132,7 +132,7 @@ void Manual(CBlob@ this, CBlob@ controller)
 	CPlayer@ player = controller.getPlayer();
 
 	// fire
-	if (controller.isMyPlayer() && controller.isKeyPressed(key_action1) && canShootManual(this) && isClearShot(this, aimVec))
+	if (controller.isMyPlayer() && controller.isKeyPressed(key_action1) && canShootManual(this))
 	{
 		u16 netID = 0;
 		if (player !is null)
@@ -140,7 +140,7 @@ void Manual(CBlob@ this, CBlob@ controller)
 		Fire1(this, aimVec, netID);
 	}
 
-	if ( controller.isMyPlayer() && controller.isKeyPressed(key_action2) && canShootManual2(this) && isClearShot(this, aimVec))
+	if ( controller.isMyPlayer() && controller.isKeyPressed(key_action2) && canShootManual2(this))
 	{
 		u16 netID = 0;
 		if (player !is null)

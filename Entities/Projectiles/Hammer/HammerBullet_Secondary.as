@@ -86,11 +86,11 @@ f32 getDamage(CBlob@ hitBlob)
 	if (hitBlob.hasTag("ram"))
 		return 2.0f;
 	if (hitBlob.hasTag("propeller"))
-		return 0.85f;
+		return 1.0f;
 	if (hitBlob.hasTag("antiram"))
 		return 1.0f;
 	if (hitBlob.hasTag("ramengine"))
-		return 1.25f;
+		return 2.0f;
 	if (hitBlob.hasTag("door"))
 		return 0.5f;
 	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
@@ -98,11 +98,11 @@ f32 getDamage(CBlob@ hitBlob)
 	if (hitBlob.hasTag("seat") || hitBlob.hasTag("weapon"))
 		return 0.315f;
 	if (hitBlob.hasTag("mothership") || hitBlob.hasTag("secondaryCore"))
-		return 0.4f;
+		return 0.5f;
 	if (hitBlob.hasTag("decoycore"))
 		return 0.3f;
 	
-	return 0.5f;
+	return 0.66f;
 }
 
 void onHitBlob(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitBlob, u8 customData)
