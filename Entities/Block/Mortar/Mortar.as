@@ -35,6 +35,7 @@ void onInit(CBlob@ this)
 	this.Tag("mortar");
 	this.Tag("weapon");
 	this.Tag("usesAmmo");
+	this.Tag("block");
 	
 	this.Tag("noEnemyEntry");
 	this.set_string("seat label", "Control Mortar");

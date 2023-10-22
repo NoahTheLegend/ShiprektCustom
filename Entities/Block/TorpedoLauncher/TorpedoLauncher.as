@@ -18,6 +18,7 @@ void onInit(CBlob@ this)
 {
 	this.Tag("weapon");
 	this.Tag("usesAmmo");
+	this.Tag("block");
 	
 	this.Tag("noEnemyEntry");
 	this.set_string("seat label", "Control Torpedo Launcher");
