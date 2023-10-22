@@ -383,7 +383,7 @@ void onTick(CBlob@ this)
 				}
 			}
 		
-			f32 power = 2.0f;
+			f32 power = 1.35f;
 
 			if (occupier !is null)
 			{
