@@ -116,6 +116,8 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 				const f32 bCost = !b.hasTag("coupling") ? getCost(b.getName(), true) : 1;
 				const f32 initialHealth = b.getInitialHealth();
 				const f32 currentReclaim = b.get_f32("current reclaim");
+				const f32 extraTime = b.exists("extra reclaim time") ? b.get_f32("extra reclaim time") : 1.0f;
+				const bool sameTeam = b.getTeamNum() == this.getTeamNum();
 
 				if (bship !is null && bCost > 0)
 				{
@@ -130,17 +132,20 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 							|| (shipOwnerName == player.getUsername()) //true if we own the ship
 							|| (b.get_string("playerOwner") == player.getUsername()))) //true if we own the specific block
 						{
-							deconstructAmount = fullConstructAmount; 
+							deconstructAmount = (1.0f/extraTime)*fullConstructAmount; 
 						}
 						else
 						{
-							deconstructAmount = (1.0f/bCost)*initialHealth; //slower reclaim
+							deconstructAmount = (1.0f/bCost+extraTime)*initialHealth; //slower reclaim
 						}
 
 						if ((currentReclaim - deconstructAmount) <= 0)
 						{
-							server_addPlayerBooty(player.getUsername(), (bCost*0.7f)*(b.getHealth()/initialHealth));
-							directionalSoundPlay("/ChaChing.ogg", barrelPos);
+							if (!b.hasTag("no reward") || sameTeam)
+							{
+								server_addPlayerBooty(player.getUsername(), (bCost*0.7f)*(b.getHealth()/initialHealth));
+								directionalSoundPlay("/ChaChing.ogg", barrelPos);
+							}
 
 							b.Tag("disabled");
 							b.server_Die();

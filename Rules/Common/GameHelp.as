@@ -131,6 +131,7 @@ void onRender(CRules@ this)
 		+ "- 10-22-2023 by NoahTheLegend (for Daskew)\n"
 		+ "  * Rebalanced weapons and costs.\n"
 		+ "  * Velocity of ship is now applied to mortar's projectiles.\n"
+		+ "  * Cannons now can stack up to 2 in a column.\n"
 		+ "  * Enhanced booster engines visually.\n"
 		+ "  * Team members don't get shuffled to other teams on core death,\n      but will switch team normally when they die eventually.\n"
 		+ "  * New weapons: torpedo launcher, hammer flak cannon.\n";

@@ -512,7 +512,7 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 		AddBlock(this, menu, "ramengine", "$RAMENGINE$", Trans::RamEngine, Trans::RamEngineDesc, core, 1.25f);
 	}
 	{ //Booster
-		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine, has a short boost with cooldown after, although while not active able to forward, but slower.\n\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.35f);
+		AddBlock(this, menu, "booster", "$BOOSTER$", "Booster", "Boosting engine, has a short boost with cooldown after activation, although while not active able to forward, but slower.\n\nActivate it manually with SPACEBAR. Activate all on with SPACEBAR and RIGHT CLICK", core, 1.35f);
 	}
 	{ //Coupling
 		AddBlock(this, menu, "coupling", "$COUPLING$", Trans::Coupling, Trans::CouplingDesc, core, 0.1f);
@@ -551,13 +551,15 @@ void BuildShopMenu(CBlob@ this, CBlob@ core, const string&in desc, const Vec2f&i
 			button.SetEnabled(false);
 			button.hoverText += "\nOnly available at your Mothership.\n";
 		}
-
 	}
 	{ //Bomb
 		AddBlock(this, menu, "bomb", "$BOMB$", Trans::Bomb, Trans::BombDesc, core, 2.0f, warmup);
 	}
 	{ //Ram Hull
 		AddBlock(this, menu, "ram", "$RAM$", Trans::Ram, Trans::RamDesc, core, 2.0f, warmup);
+	}
+	{ //Barnacles (loader)
+		AddBlock(this, menu, "loader", "$LOADER$", "Barnacles Trap", "Overloads ships with extreme weight. A good way to slow down your enemy at close range.", core, 10.0f);
 	}
 	{ //Harpoon
 		AddBlock(this, menu, "harpoon", "$HARPOON$", Trans::Harpoon, Trans::HarpoonDesc, core, 2.0f);
@@ -795,18 +797,19 @@ void Construct(CBlob@ this)
 			if (currentTool == "deconstructor")
 			{
 				if (blob.hasTag("mothership")) return;
-				
+				const f32 extra = blob.exists("extra reclaim time") ? blob.get_f32("extra reclaim time") : 1.0f;
+
 				const string blockOwner = blob.get_string("playerOwner");
 				
 				if ((ship.owner.isEmpty() && !ship.isMothership)
 					|| (blockOwner.isEmpty() && (!ship.isMothership || blob.getTeamNum() == this.getTeamNum()))
 					|| ship.owner == playerName || blockOwner == playerName)
 				{
-					reclaim = currentReclaim - constructAmount;
+					reclaim = currentReclaim - constructAmount / Maths::Sqrt(extra);
 				}
 				else
 				{
-					reclaim = currentReclaim - constructAmount / 3;
+					reclaim = currentReclaim - constructAmount / 3 / Maths::Sqrt(extra);
 					doWarning = true;
 				}
 				
@@ -826,7 +829,6 @@ void Construct(CBlob@ this)
 					cost = -reconstructCost;
 				}
 			}
-			
 			reclaim = Maths::Min(reclaim, initHealth);
 			
 			CBitStream params;
@@ -982,7 +984,10 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 		blob.set_f32("current reclaim", reclaim);
 		if (server_getPlayerBooty(playerName) > -cost)
 		{
-			server_addPlayerBooty(playerName, cost);
+			if (!blob.hasTag("no reward") || blob.getTeamNum() == this.getTeamNum())
+			{
+				server_addPlayerBooty(playerName, cost);
+			}
 			blob.server_SetHealth(heal);
 		}
 		

@@ -5,6 +5,7 @@ void onInit(CBlob@ this)
 	this.addCommandID("decouple");
 	this.addCommandID("couple");
 	this.Tag("coupling");
+	this.Tag("couples");
 	this.Tag("ramming");
 	this.Tag("removable");//for corelinked checks
 	
