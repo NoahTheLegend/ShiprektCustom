@@ -200,7 +200,10 @@ f32 getDamage(CBlob@ hitBlob)
 		return 1.0f;
 	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
 		return 0.85f;
-	if (hitBlob.hasTag("seat") || hitBlob.hasTag("weapon") || hitBlob.hasTag("bomb") || hitBlob.hasTag("core"))
+	if (hitBlob.hasTag("seat") || hitBlob.hasTag("weapon") || hitBlob.hasTag("bomb")
+		|| hitBlob.hasTag("core") || hitBlob.hasTag("mothership"))
 		return 0.33f;
-	return 0.6f;
+	if (hitBlob.hasTag("solid"))
+		return 0.5f;
+	return 0.1f;
 }
