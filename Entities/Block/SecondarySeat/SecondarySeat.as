@@ -386,6 +386,54 @@ void onTick(CBlob@ this)
 
 			if (!ship.captains_controls)
 			{
+				//reset			
+				if (!up && !down)
+				{
+					this.set_bool("kUD", false);
+
+					for (u16 i = 0; i < upPropLength; ++i)
+					{
+						CBlob@ prop = getBlobByNetworkID(up_propellers[i]);
+						if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+						{
+							prop.set_f32("power", 0);
+							prop.set_f32("powerFactor", prop.get_f32("initPowerFactor"));
+						}
+					}
+					for (u16 i = 0; i < downPropLength; ++i)
+					{
+						CBlob@ prop = getBlobByNetworkID(down_propellers[i]);
+						if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+						{
+							prop.set_f32("power", 0);
+							prop.set_f32("powerFactor", prop.get_f32("initPowerFactor"));
+						}
+					}
+				}
+				if ((strafe || (!left && !right)))
+				{
+					this.set_bool("kLR", false);
+
+					for (u16 i = 0; i < leftPropLength; ++i)
+					{
+						CBlob@ prop = getBlobByNetworkID(left_propellers[i]);
+						if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+						{
+							prop.set_f32("power", 0);
+							prop.set_f32("powerFactor", prop.get_f32("initPowerFactor"));
+						}
+					}
+					for (u16 i = 0; i < rightPropLength; ++i)
+					{
+						CBlob@ prop = getBlobByNetworkID(right_propellers[i]);
+						if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+						{
+							prop.set_f32("power", 0);
+							prop.set_f32("powerFactor", prop.get_f32("initPowerFactor"));
+						}
+					}
+				}
+
 				f32 power, reverse_power;
 				if (ship.isMothership)
 				{

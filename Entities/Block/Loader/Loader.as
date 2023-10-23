@@ -8,7 +8,7 @@ void onInit(CBlob@ this)
     this.Tag("solid");
 	this.Tag("no reward");
 	
-	this.set_f32("extra reclaim time", 2.5f);
+	this.set_f32("extra reclaim time", 2.0f);
 	this.set_f32("weight", 10.0f);
 }
 
