@@ -435,6 +435,7 @@ void UpdateShips(CRules@ this, const bool&in integrate = true)
 		ship.soundsPlayed = 0;
 		ship.carryMass = 0;
 		ship.colliding = false;
+		ship.captains_controls = false;
 		
 		if (ship.centerBlock is null) //initialize or re-calibrate ship
 		{
@@ -556,6 +557,13 @@ void UpdateShips(CRules@ this, const bool&in integrate = true)
 						if (oldestSeat !is null && (mothership ? shipLinked(oldestSeat, core, checked, unchecked) : true))
 						{
 							oldestSeatOwner = oldestSeat.get_string("playerOwner");
+							AttachmentPoint@ ap = oldestSeat.getAttachments().getAttachmentPointByName("SEAT");
+							if (ap !is null && ap.getOccupied() !is null)
+							{
+								CPlayer@ iscap = ap.getOccupied().getPlayer();
+								if (iscap !is null && iscap.getUsername() == ship.owner)
+									ship.captains_controls = true;
+							}
 							break;
 						}
 					}

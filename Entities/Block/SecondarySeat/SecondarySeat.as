@@ -384,116 +384,20 @@ void onTick(CBlob@ this)
 				}
 			}
 
-			/*//power to use
-			f32 power, reverse_power;
-			if (ship.isMothership)
+			if (!ship.captains_controls)
 			{
-				power = -1.05f;
-				reverse_power = 0.15f;
-			}
-			else
-			{
-				power = -1.0f;
-				reverse_power = 0.1f;
-			}
-			
-			//movement modes
-			if (up || down)
-			{
-				this.set_bool("kUD", true);
-
-				for (u16 i = 0; i < upPropLength; ++i)
+				f32 power, reverse_power;
+				if (ship.isMothership)
 				{
-					CBlob@ prop = getBlobByNetworkID(up_propellers[i]);
-					if (prop is null) continue;
-
-					if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
-					{
-						prop.set_u32("onTime", gameTime);
-						f32 power_factor = prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor");
-						prop.set_f32("power", up ? power * power_factor : reverse_power * power_factor);
-					}
-				}
-				for (u16 i = 0; i < downPropLength; ++i)
-				{
-					CBlob@ prop = getBlobByNetworkID(down_propellers[i]);
-					if (prop is null) continue;
-
-					if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
-					{
-						prop.set_u32("onTime", gameTime);
-						f32 power_factor = prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor");
-						prop.set_f32("power", down ? power * power_factor : reverse_power * power_factor);
-					}
-				}
-			}
-			
-			if (left || right)
-			{
-				this.set_bool("kLR", true);
-
-				if (!strafe)
-				{
-					for (u16 i = 0; i < leftPropLength; ++i)
-					{
-						CBlob@ prop = getBlobByNetworkID(left_propellers[i]);
-						if (prop is null) continue;
-
-						if (seatColor == prop.getShape().getVars().customData &&  (teamInsensitive || occupierTeam == prop.getTeamNum()))
-						{
-							prop.set_u32("onTime", gameTime);
-							f32 power_factor = prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor");
-							prop.set_f32("power", left ? power * power_factor : reverse_power * power_factor);
-						}
-					}
-					for (u16 i = 0; i < rightPropLength; ++i)
-					{
-						CBlob@ prop = getBlobByNetworkID(right_propellers[i]);
-						if (prop is null) continue;
-
-						if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
-						{
-							prop.set_u32("onTime", gameTime);
-							f32 power_factor = prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor");
-							prop.set_f32("power", right ? power * power_factor : reverse_power * power_factor);
-						}
-					}
+					power = -1.05f;
+					reverse_power = 0.15f;
 				}
 				else
 				{
-					const u8 maxStrafers = Maths::Round(Maths::FastSqrt(ship.mass)/3.0f);
-					const u16 strLeftPropLength = strafe_left_propellers.length;
-					for (u16 i = 0; i < strLeftPropLength; ++i)
-					{
-						CBlob@ prop = getBlobByNetworkID(strafe_left_propellers[i]);
-						if (prop is null) continue;
-						if (prop.hasTag("booster") && (!prop.hasTag("activated") || prop.get_u32("cooldown") > getGameTime())) continue;
-						const f32 oDrive = i < maxStrafers ? 2.0f : 1.0f;
-						if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
-						{
-							prop.set_u32("onTime", gameTime);
-							prop.set_f32("power", left ? oDrive * power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
-						}
-					}
-					const u16 strRightPropLength = strafe_right_propellers.length;
-					for (u16 i = 0; i < strRightPropLength; ++i)
-					{
-						CBlob@ prop = getBlobByNetworkID(strafe_right_propellers[i]);
-						if (prop is null) continue;
-						if (prop.hasTag("booster") && (!prop.hasTag("activated") || prop.get_u32("cooldown") > getGameTime())) continue;
-						const f32 oDrive = i < maxStrafers ? 2.0f : 1.0f;
-						if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
-						{
-							prop.set_u32("onTime", gameTime);
-							prop.set_f32("power", right ? oDrive * power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
-						}
-					}
+					power = -1.0f;
+					reverse_power = 0.1f;
 				}
-			}*/
-		
-			f32 power = 1.0f + seat_boost;
-			if (occupier !is null)
-			{
+
 				//movement modes
 				if (up || down)
 				{
@@ -502,25 +406,29 @@ void onTick(CBlob@ this)
 					for (u16 i = 0; i < upPropLength; ++i)
 					{
 						CBlob@ prop = getBlobByNetworkID(up_propellers[i]);
-						if (prop is null || !up) continue;
+						if (prop is null) continue;
 
 						if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 						{
-							prop.set_f32("powerFactor", prop.get_f32("initPowerFactor")*power);
+							prop.set_u32("onTime", gameTime);
+							f32 power_factor = prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor");
+							prop.set_f32("power", up ? power * power_factor : reverse_power * power_factor);
 						}
 					}
 					for (u16 i = 0; i < downPropLength; ++i)
 					{
 						CBlob@ prop = getBlobByNetworkID(down_propellers[i]);
-						if (prop is null || !down) continue;
+						if (prop is null) continue;
 
 						if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 						{
-							prop.set_f32("powerFactor", prop.get_f32("initPowerFactor")*power);
+							prop.set_u32("onTime", gameTime);
+							f32 power_factor = prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor");
+							prop.set_f32("power", down ? power * power_factor : reverse_power * power_factor);
 						}
 					}
 				}
-			
+
 				if (left || right)
 				{
 					this.set_bool("kLR", true);
@@ -530,17 +438,84 @@ void onTick(CBlob@ this)
 						for (u16 i = 0; i < leftPropLength; ++i)
 						{
 							CBlob@ prop = getBlobByNetworkID(left_propellers[i]);
-							if (prop is null || !left) continue;
+							if (prop is null) continue;
 
 							if (seatColor == prop.getShape().getVars().customData &&  (teamInsensitive || occupierTeam == prop.getTeamNum()))
 							{
-								prop.set_f32("powerFactor", prop.get_f32("initPowerFactor")*power);
+								prop.set_u32("onTime", gameTime);
+								f32 power_factor = prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor");
+								prop.set_f32("power", left ? power * power_factor : reverse_power * power_factor);
 							}
 						}
 						for (u16 i = 0; i < rightPropLength; ++i)
 						{
 							CBlob@ prop = getBlobByNetworkID(right_propellers[i]);
-							if (prop is null || !right) continue;
+							if (prop is null) continue;
+
+							if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+							{
+								prop.set_u32("onTime", gameTime);
+								f32 power_factor = prop.hasTag("booster") && !prop.hasTag("activated") ? prop.get_f32("powerFactor")/2 : prop.get_f32("powerFactor");
+								prop.set_f32("power", right ? power * power_factor : reverse_power * power_factor);
+							}
+						}
+					}
+					else
+					{
+						const u8 maxStrafers = Maths::Round(Maths::FastSqrt(ship.mass)/3.0f);
+						const u16 strLeftPropLength = strafe_left_propellers.length;
+						for (u16 i = 0; i < strLeftPropLength; ++i)
+						{
+							CBlob@ prop = getBlobByNetworkID(strafe_left_propellers[i]);
+							if (prop is null) continue;
+							if (prop.hasTag("booster") && (!prop.hasTag("activated") || prop.get_u32("cooldown") > getGameTime())) continue;
+							const f32 oDrive = i < maxStrafers ? 2.0f : 1.0f;
+							if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+							{
+								prop.set_u32("onTime", gameTime);
+								prop.set_f32("power", left ? oDrive * power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
+							}
+						}
+						const u16 strRightPropLength = strafe_right_propellers.length;
+						for (u16 i = 0; i < strRightPropLength; ++i)
+						{
+							CBlob@ prop = getBlobByNetworkID(strafe_right_propellers[i]);
+							if (prop is null) continue;
+							if (prop.hasTag("booster") && (!prop.hasTag("activated") || prop.get_u32("cooldown") > getGameTime())) continue;
+							const f32 oDrive = i < maxStrafers ? 2.0f : 1.0f;
+							if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+							{
+								prop.set_u32("onTime", gameTime);
+								prop.set_f32("power", right ? oDrive * power * prop.get_f32("powerFactor") : reverse_power * prop.get_f32("powerFactor"));
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				f32 power = 1.0f + seat_boost;
+				if (occupier !is null)
+				{
+					//movement modes
+					if (up || down)
+					{
+						this.set_bool("kUD", true);
+
+						for (u16 i = 0; i < upPropLength; ++i)
+						{
+							CBlob@ prop = getBlobByNetworkID(up_propellers[i]);
+							if (prop is null || !up) continue;
+
+							if (prop !is null && seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+							{
+								prop.set_f32("powerFactor", prop.get_f32("initPowerFactor")*power);
+							}
+						}
+						for (u16 i = 0; i < downPropLength; ++i)
+						{
+							CBlob@ prop = getBlobByNetworkID(down_propellers[i]);
+							if (prop is null || !down) continue;
 
 							if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
 							{
@@ -548,9 +523,38 @@ void onTick(CBlob@ this)
 							}
 						}
 					}
+
+					if (left || right)
+					{
+						this.set_bool("kLR", true);
+
+						if (!strafe)
+						{
+							for (u16 i = 0; i < leftPropLength; ++i)
+							{
+								CBlob@ prop = getBlobByNetworkID(left_propellers[i]);
+								if (prop is null || !left) continue;
+
+								if (seatColor == prop.getShape().getVars().customData &&  (teamInsensitive || occupierTeam == prop.getTeamNum()))
+								{
+									prop.set_f32("powerFactor", prop.get_f32("initPowerFactor")*power);
+								}
+							}
+							for (u16 i = 0; i < rightPropLength; ++i)
+							{
+								CBlob@ prop = getBlobByNetworkID(right_propellers[i]);
+								if (prop is null || !right) continue;
+
+								if (seatColor == prop.getShape().getVars().customData && (teamInsensitive || occupierTeam == prop.getTeamNum()))
+								{
+									prop.set_f32("powerFactor", prop.get_f32("initPowerFactor")*power);
+								}
+							}
+						}
+					}
 				}
 			}
-			
+
 			if (!space && !Human::isHoldingBlocks(occupier) && !Human::wasHoldingBlocks(occupier))
 			{
 				//machineguns on left click
@@ -562,7 +566,7 @@ void onTick(CBlob@ this)
 					{
 						CBlob@ weap = getBlobByNetworkID(machineguns[i]);
 						if (weap is null) continue;
-						
+
 						Vec2f dirFacing = Vec2f(1, 0).RotateBy(weap.getAngleDegrees());
 						if (Maths::Abs(dirFacing.AngleWith(aim)) < 40)
 						{
@@ -579,12 +583,12 @@ void onTick(CBlob@ this)
 					CBlob@[] fireCannons;
 					Vec2f aim = occupier.getAimPos() - this.getPosition();//relative to seat
 					CBlob@ fitCannon = getMap().getBlobAtPosition(occupier.getAimPos());
-					
+
 					for (u16 i = 0; i < cannonsLength; ++i)
 					{
 						CBlob@ weap = getBlobByNetworkID(cannons[i]);
 						if (weap is null || !weap.get_bool("fire ready")) continue;
-						
+
 						Vec2f dirFacing = Vec2f(1, 0).RotateBy(weap.getAngleDegrees());
 						if (fitCannon !is null)
 						{
@@ -598,7 +602,7 @@ void onTick(CBlob@ this)
 						if (Maths::Abs(dirFacing.AngleWith(aim)) < 40)
 							fireCannons.push_back(weap);
 					}
-					
+
 					if (fireCannons.length > 0)
 					{
 						const u8 index = this.get_u8("cannonFireIndex");

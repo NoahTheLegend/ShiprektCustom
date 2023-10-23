@@ -15,6 +15,7 @@ shared class Ship
 	bool isStation;           //does the ship contain a station?
 	bool isSecondaryCore;     //does the ship contain an auxiliary core?
 	bool colliding;           //used in ship collisions to stop ships from colliding twice in the same tick
+	bool captains_controls;
 	
 	Vec2f net_pos, net_vel;        //network
 	f32 net_angle, net_angle_vel;  //network
@@ -27,6 +28,7 @@ shared class Ship
 		soundsPlayed = 0;
 		owner = "";
 		copilot = "";
+		captains_controls = false;
 	}
 	
 	bool opEquals(Ship@ ship)
