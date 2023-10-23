@@ -435,7 +435,6 @@ void UpdateShips(CRules@ this, const bool&in integrate = true)
 		ship.soundsPlayed = 0;
 		ship.carryMass = 0;
 		ship.colliding = false;
-		ship.captains_controls = false;
 		
 		if (ship.centerBlock is null) //initialize or re-calibrate ship
 		{
@@ -563,6 +562,7 @@ void UpdateShips(CRules@ this, const bool&in integrate = true)
 								CPlayer@ iscap = ap.getOccupied().getPlayer();
 								if (iscap !is null && iscap.getUsername() == ship.owner)
 									ship.captains_controls = true;
+								else ship.captains_controls = false;
 							}
 							break;
 						}
