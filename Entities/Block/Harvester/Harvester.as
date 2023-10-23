@@ -136,7 +136,7 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 						}
 						else
 						{
-							deconstructAmount = (1.0f/bCost+extraTime)*initialHealth; //slower reclaim
+							deconstructAmount = (1.0f/(bCost+extraTime-1.0f))*initialHealth; //slower reclaim
 						}
 
 						if ((currentReclaim - deconstructAmount) <= 0)
