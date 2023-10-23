@@ -124,10 +124,10 @@ void onCollision(CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f point
 		
 		//TODO: isolate collision code in each blob's script rather than here
 				
-		const bool docking = (this.hasTag("couples") || blob.hasTag("couples")) && this.getTeamNum() == blob.getTeamNum()
+		const bool docking = (this.hasTag("loader") && !blob.hasTag("ramming")) || ((this.hasTag("couples") || blob.hasTag("couples")) && this.getTeamNum() == blob.getTeamNum()
 				&& ((ship.isMothership || other_ship.isMothership) || (ship.isSecondaryCore || other_ship.isSecondaryCore) || (ship.isStation || other_ship.isStation))
-				&& ((!ship.isMothership && !ship.isSecondaryCore && !ship.owner.isEmpty()) || (!other_ship.isMothership && !other_ship.isSecondaryCore && !other_ship.owner.isEmpty()));
-		
+				&& ((!ship.isMothership && !ship.isSecondaryCore && !ship.owner.isEmpty()) || (!other_ship.isMothership && !other_ship.isSecondaryCore && !other_ship.owner.isEmpty())));
+
 		if (docking) //force ship merge
 		{
 			if (blob.hasTag("couples"))
@@ -183,7 +183,7 @@ void onCollision(CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f point
 						Die(this);
 						Die(blob);
 					}
-					else if (blob.hasTag("core"))
+					else if (blob.hasTag("core") || blob.hasTag("loader"))
 					{
 						this.server_Hit(blob, point1, ship.vel, 1.0f, 0, true);
 						Die(this);

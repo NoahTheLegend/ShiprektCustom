@@ -2,17 +2,17 @@
 #include "AccurateSoundPlay.as";
 void onInit(CBlob@ this)
 {
-	//this.addCommandID("couple");
+	this.addCommandID("couple");
 	this.Tag("loader");
-	//this.Tag("couples");
+	this.Tag("couples");
     this.Tag("solid");
 	this.Tag("no reward");
 	
-	this.set_f32("extra reclaim time", 5.0f);
+	this.set_f32("extra reclaim time", 2.5f);
 	this.set_f32("weight", 10.0f);
 }
 
-/*void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
+void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 {
 	if (cmd == this.getCommandID("couple"))
 	{
@@ -26,4 +26,4 @@ void onInit(CBlob@ this)
 			getRules().push("dirtyBlocks", tempArray);
 		}
 	}
-}*/
+}
