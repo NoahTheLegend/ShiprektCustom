@@ -4,14 +4,14 @@
 
 const f32 PROJECTILE_SPEED = 11.0f;
 const f32 PROJECTILE_SPREAD = 16.0f;
-const int FIRE_RATE = 90;
+const int FIRE_RATE = 45;
 const f32 PROJECTILE_RANGE = 450.0f;
 const f32 CLONE_RADIUS = 20.0f;
 const f32 p1_lifetime = 1.5f;
 const f32 p2_lifetime = 2.5f;
 
 // Max amount of ammunition
-const uint8 MAX_AMMO = 10;
+const uint8 MAX_AMMO = 12;
 
 // Amount of ammunition to refill when
 // connected to motherships and stations

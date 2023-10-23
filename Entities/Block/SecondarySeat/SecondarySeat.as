@@ -601,7 +601,8 @@ void onTick(CBlob@ this)
 					}
 				}
 			}
-
+			//if (occupier.getPlayer() !is null && occupier.getPlayer().getUsername() == "NoahTheLegend")
+			//	printf("sp "+space+" hold "+Human::isHoldingBlocks(occupier)+" held "+Human::wasHoldingBlocks(occupier));
 			if (!space && !Human::isHoldingBlocks(occupier) && !Human::wasHoldingBlocks(occupier))
 			{
 				//machineguns on left click
