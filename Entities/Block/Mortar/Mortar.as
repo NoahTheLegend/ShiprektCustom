@@ -5,7 +5,7 @@
 
 const f32 PROJECTILE_SPEED = 3.0f;
 const f32 PROJECTILE_SPREAD = 0.4;
-const int FIRE_RATE = 420; //210 - 7 seconds
+const int FIRE_RATE = 450; //30 is 1 second
 const f32 PROJECTILE_RANGE = 300.0f;
 const f32 CLONE_RADIUS = 20.0f;
 

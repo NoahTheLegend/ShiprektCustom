@@ -128,6 +128,7 @@ void onRender(CRules@ this)
 		//PAGE 1
 		const string shiprektVersion = "Shiprekt++ "+Trans::Version+" "+this.get_string("version")+"\n";
 		const string lastChangesInfo = Trans::LastChanges+":\n"
+		+ "\nORIGINALLY UPDATED AND MAINTAINED BY Gingerbeard and GoldenGuy (before)\n\n"
 		+ "- 10-22-2023 by NoahTheLegend (for Daskew)\n"
 		+ "  * Rebalanced weapons and costs.\n"
 		+ "  * Velocity of ship is now applied to mortar's projectiles.\n"

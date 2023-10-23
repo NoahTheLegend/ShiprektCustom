@@ -4,15 +4,28 @@
 #include "Hitters.as";
 #include "PlankCommon.as";
 #include "WaterEffects.as";
+#include "DamageBooty.as";
 
 const f32 SPLASH_RADIUS = 12.0f;
 const f32 SPLASH_DAMAGE = 2.25f;
 const f32 MORTAR_REACH = 4.0f;
 
+BootyRewards@ booty_reward;
+
 void onInit(CBlob@ this)
 {
 	this.Tag("mortar shell");
 	this.Tag("projectile");
+
+	if (booty_reward is null)
+	{
+		BootyRewards _booty_reward;
+		_booty_reward.addTagReward("bomb", 2);
+		_booty_reward.addTagReward("engine", 1);
+		_booty_reward.addTagReward("weapon", 2);
+		_booty_reward.addTagReward("core", 4);
+		@booty_reward = _booty_reward;
+	}
 
 	this.set_f32("scale", 1.0);
 
@@ -93,11 +106,9 @@ void mortar(CBlob@ this)
 				if (b is null || b is this) continue;
 									
 				const bool sameTeam = b.getTeamNum() == this.getTeamNum();
-				if (b.hasTag("solid") || b.hasTag("door") || (!sameTeam
-					&& (b.hasTag("seat") || b.hasTag("weapon") || b.hasTag("projectile") || b.hasTag("core") || b.hasTag("bomb") || (b.hasTag("player") && !b.isAttached()))))
+				if (!b.hasTag("seat") && (b.hasTag("block") || b.hasTag("weapon")) && b.getShape().getVars().customData > 0 && !sameTeam)
 				{
 					this.server_Hit(b, hitInfos[i].hitpos, Vec2f_zero, getDamage(b), Hitters::bomb, true);
-					break;
 				}
 			}
 		}
@@ -158,6 +169,17 @@ void onDie(CBlob@ this)
 	}
 }
 
+void onHitBlob(CBlob@ this, Vec2f worldPoint, Vec2f velocity, f32 damage, CBlob@ hitBlob, u8 customData)
+{
+	CPlayer@ owner = this.getDamageOwnerPlayer();
+	if (owner !is null)
+	{
+		CBlob@ blob = owner.getBlob();
+		if (blob !is null)
+			rewardBooty(owner, hitBlob, booty_reward);
+	}
+}
+
 void Explode(CBlob@ this, f32 radius = EXPLODE_RADIUS)
 {
     Vec2f pos = this.getPosition();
@@ -180,14 +202,6 @@ void Explode(CBlob@ this, f32 radius = EXPLODE_RADIUS)
 		{
 			Vec2f hit_blob_pos = hit_blob.getPosition();  
 
-			if (hit_blob.hasTag("block"))
-			{
-				if (hit_blob.getShape().getVars().customData <= 0)
-					continue;
-			}
-		
-			f32 damageFactor = (hit_blob.hasTag("mothership") || hit_blob.hasTag("player")) ? 0.15f : 0.5f;
-
 			//hit the object
 			this.server_Hit(hit_blob, hit_blob_pos, Vec2f_zero, getDamage(hit_blob), Hitters::explosion, true);
 		}
@@ -196,14 +210,26 @@ void Explode(CBlob@ this, f32 radius = EXPLODE_RADIUS)
 
 f32 getDamage(CBlob@ hitBlob)
 {
-	if (hitBlob.hasTag("door"))
-		return 1.0f;
-	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
-		return 0.85f;
-	if (hitBlob.hasTag("seat") || hitBlob.hasTag("weapon") || hitBlob.hasTag("bomb")
-		|| hitBlob.hasTag("core") || hitBlob.hasTag("mothership"))
-		return 0.33f;
-	if (hitBlob.hasTag("solid"))
+	if (hitBlob.hasTag("bomb"))
+		return 4.0f;
+	if (hitBlob.hasTag("ram"))
 		return 0.5f;
-	return 0.1f;
+	if (hitBlob.hasTag("propeller"))
+		return 0.5f;
+	if (hitBlob.hasTag("antiram"))
+		return 1.0f;
+	if (hitBlob.hasTag("ramengine"))
+		return 0.75f;
+	if (hitBlob.hasTag("door") || hitBlob.hasTag("weapon"))
+		return 0.33f;
+	if (hitBlob.getName() == "shark" || hitBlob.getName() == "human")
+		return 1.0f;
+	if (hitBlob.hasTag("seat"))
+		return 0.1f;
+	if (hitBlob.hasTag("mothership") || hitBlob.hasTag("secondaryCore"))
+		return 0.5f;
+	if (hitBlob.hasTag("decoycore"))
+		return 0.3f;
+	
+	return 0.35f;
 }
