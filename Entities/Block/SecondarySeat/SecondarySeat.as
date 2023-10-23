@@ -7,7 +7,7 @@ const u16 COUPLINGS_COOLDOWN = 8 * 30;
 const u16 CREW_COUPLINGS_LEASE = 20 * 30;
 const u16 UNUSED_RESET = 5 * 30;
 const u8 CANNON_FIRE_CYCLE = 15;
-const f32 seat_boost = 0.6f; // 0.1f is 10%
+const f32 seat_boost = 0.5f; // 0.1f is 10%
 
 void onInit(CBlob@ this)
 {
