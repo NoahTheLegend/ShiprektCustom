@@ -81,6 +81,8 @@ void Manual(CBlob@ this, CBlob@ controller)
 	{
 		Fire(this, aimVec, controller.getNetworkID(), true);
 	}
+
+	controller.setAngleDegrees(this.getAngleDegrees());
 }
 
 void Fire(CBlob@ this, Vec2f&in aimVector, const u16&in netid, const bool&in manual = false)
