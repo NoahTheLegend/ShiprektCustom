@@ -564,8 +564,11 @@ void UpdateShips(CRules@ this, const bool&in integrate = true)
 									ship.captains_controls = true;
 								else ship.captains_controls = false;
 							}
+							else ship.captains_controls = false;
+
 							break;
 						}
+						else ship.captains_controls = false;
 					}
 				}
 

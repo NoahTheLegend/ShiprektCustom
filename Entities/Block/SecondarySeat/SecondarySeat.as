@@ -523,8 +523,7 @@ void onTick(CBlob@ this)
 							}
 						}
 					}
-
-					if (left || right)
+					else if (left || right)
 					{
 						this.set_bool("kLR", true);
 
