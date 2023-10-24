@@ -38,6 +38,14 @@ void onInit(CBlob@ this)
 	CSprite@ sprite = this.getSprite();
     sprite.SetRelativeZ(2);
 
+	{
+		//shoot anim
+		Animation@ anim = sprite.addAnimation("fire", 0, false);
+		anim.AddFrame(0);
+		anim.AddFrame(1);
+		sprite.SetAnimation("fire");
+	}
+
 	this.set_u32("fire time", 0);
 }
 
@@ -56,6 +64,12 @@ void onTick(CBlob@ this)
 
 		operatorid = occupier.getNetworkID();
 		this.set_u16("operatorid", operatorid);
+	}
+
+	if (isClient() && this.get_u16("ammo") > 0 && this.getSprite().animation.frame == 0)
+	{
+		this.getSprite().animation.SetFrameIndex(1);
+		directionalSoundPlay("Charging.ogg", this.getPosition(), 2.0f);
 	}
 
 	if (isServer())
@@ -210,7 +224,8 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 		Vec2f velocity = aimvector*BULLET_SPEED;
 
 		shotParticles(barrelPos, aimvector.Angle(), false);
-		directionalSoundPlay("LauncherFire" + (XORRandom(2) + 1), barrelPos, 1.0f, 0.85f);
+		directionalSoundPlay("TorpedoLauncher_shoot", barrelPos, 1.0f, 1.1f);
+		this.getSprite().animation.SetFrameIndex(0);
 
 		if (!canShootManual(this)) return;
 

@@ -50,8 +50,8 @@ void onInit(CBlob@ this)
 		CSprite@ sprite = this.getSprite();
 		sprite.SetZ(1.5f);	
 		sprite.SetEmitSound("/torpedo_loop.ogg");
-		sprite.SetEmitSoundVolume(0.4f);
-		sprite.SetEmitSoundSpeed(0.8f);
+		sprite.SetEmitSoundVolume(0.65f);
+		sprite.SetEmitSoundSpeed(1.0f);
 		sprite.SetEmitSoundPaused(true);
 	}
 
@@ -65,8 +65,14 @@ void onTick(CBlob@ this)
 {
 	if (this.getTimeToDie() <= 0.1f)
 	{
+		if (isClient() && !this.hasTag("sunk"))
+		{
+			directionalSoundPlay("sink.ogg", this.getPosition(), 0.5f, 0.85f);
+		}
+		
 		this.Tag("sunk");
-		this.server_Die();
+		if (isServer())
+			this.server_Die();
 	}
 
 	if (this.getPlayer() is null && !this.hasTag("had_shooter"))

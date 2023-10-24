@@ -78,7 +78,7 @@ void onInit(CRules@ this)
 	AddIconToken("$POINTDEFENSE$", "PointDefense.png", Vec2f(16,16), 0);
 	AddIconToken("$LAUNCHER$", "Launcher.png", Vec2f(16,16), 0);
 	AddIconToken("$HAMMERCANNON$", "Hammer.png", Vec2f(16,16), 0);
-	AddIconToken("$TORPLAUNCHER$", "TorpedoLauncher.png", Vec2f(16,16), 0);
+	AddIconToken("$TORPLAUNCHER$", "TorpedoLauncher.png", Vec2f(18,16), 0);
 	AddIconToken("$MORTAR$", "Mortar.png", Vec2f(16,16), 0);
 	AddIconToken("$COUPLING$", "Coupling.png", Vec2f(8,8), 0);
 	AddIconToken("$REPULSOR$", "Repulsor.png", Vec2f(8,8), 0);
