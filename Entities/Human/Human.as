@@ -1087,7 +1087,8 @@ void onCommand(CBlob@ this, u8 cmd, CBitStream@ params)
 					for (u8 i = 0; i < crewLength; i++)
 					{
 						CPlayer@ crewPlayer = crew[i].getPlayer();
-						server_addPlayerBooty(crewPlayer.getUsername(), shareBooty);
+						if (crewPlayer !is null)
+							server_addPlayerBooty(crewPlayer.getUsername(), shareBooty);
 					}
 				}
 			}

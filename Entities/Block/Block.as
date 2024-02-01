@@ -130,10 +130,18 @@ void onCollision(CBlob@ this, CBlob@ blob, bool solid, Vec2f normal, Vec2f point
 
 		if (docking) //force ship merge
 		{
+			ShapeVars@ shapeVars = this.getShape().getVars();
+
 			if (blob.hasTag("couples"))
-				blob.SendCommand(blob.getCommandID("couple"));
+			{
+				if (!blob.hasTag("couples if alone") || shapeVars.customData >= 15)
+					blob.SendCommand(blob.getCommandID("couple"));
+			}
 			else if (this.hasTag("couples"))
-				this.SendCommand(this.getCommandID("couple"));
+			{
+				if (!this.hasTag("couples if alone") || shapeVars.customData >= 15)
+					this.SendCommand(this.getCommandID("couple"));
+			}
 		}
 		else
 		{

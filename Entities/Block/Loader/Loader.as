@@ -5,6 +5,7 @@ void onInit(CBlob@ this)
 	this.addCommandID("couple");
 	this.Tag("loader");
 	this.Tag("couples");
+	this.Tag("couples if alone");
     this.Tag("solid");
 	this.Tag("no reward");
 	
